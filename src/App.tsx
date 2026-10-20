@@ -4,6 +4,7 @@ import { TopicInputSection } from "./components/TopicInputSection";
 import { AIResponseDisplay } from "./components/AIResponseDisplay";
 import { HistoryDrawer } from "./components/HistoryDrawer";
 import { StudyBuddyResponse, StudyHistoryItem } from "./types";
+import { generateClientFallbackLesson } from "./utils/fallbackLessons";
 import {
   Sparkles,
   BookOpen,
@@ -64,6 +65,28 @@ export default function App() {
     localStorage.setItem("thanh_hang_history", JSON.stringify(history));
   }, [history]);
 
+  // Support link params (?topic=..., ?subject=...) when user opens link
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const urlTopic = params.get("topic") || params.get("bai") || params.get("chude");
+        const urlSubject = params.get("subject") || params.get("mon");
+        if (urlSubject === "toan" || urlSubject === "tieng-viet" || urlSubject === "all") {
+          setSubject(urlSubject);
+        }
+        if (urlTopic && urlTopic.trim()) {
+          const cleanTopic = urlTopic.trim();
+          setTopic(cleanTopic);
+          // Auto load topic from link
+          handleSearch(cleanTopic);
+        }
+      } catch (e) {
+        console.warn("Could not parse URL query parameters:", e);
+      }
+    }
+  }, []);
+
   const handleEarnStars = (count: number) => {
     setTotalStars((prev) => prev + count);
   };
@@ -80,7 +103,7 @@ export default function App() {
     );
   };
 
-  // Perform search / learn API call
+  // Perform search / learn API call with resilient fallback
   const handleSearch = async (topicToSearch?: string) => {
     const targetTopic = (topicToSearch || topic).trim();
     if (!targetTopic || isLoading) return;
@@ -88,7 +111,12 @@ export default function App() {
     setIsLoading(true);
     setError(null);
 
+    let data: StudyBuddyResponse | null = null;
+
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 12000);
+
       const response = await fetch("/api/learn", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -97,14 +125,27 @@ export default function App() {
           ageGroup: ageGroup,
           subject: subject,
         }),
+        signal: controller.signal,
       });
+      clearTimeout(timeoutId);
 
-      if (!response.ok) {
-        throw new Error("Không thể kết nối đến Cô Thanh Hằng, con thử bấm lại nhé!");
+      if (response.ok) {
+        data = await response.json();
+      } else {
+        console.warn("/api/learn returned non-200 status:", response.status);
       }
+    } catch (fetchErr: any) {
+      console.warn("API call failed or timed out:", fetchErr?.message);
+    }
 
-      const data: StudyBuddyResponse = await response.json();
+    // If server succeeded and returned data, use it; otherwise use smart client fallback
+    if (!data || !data.simpleExplanation || !data.flashcards || data.flashcards.length === 0) {
+      data = generateClientFallbackLesson(targetTopic, subject, ageGroup);
+    }
+
+    try {
       setStudyData(data);
+      setError(null);
 
       // Add to history
       const newHistoryItem: StudyHistoryItem = {
@@ -119,7 +160,7 @@ export default function App() {
 
       setHistory((prev) => [
         newHistoryItem,
-        ...prev.filter((item) => item.topic.toLowerCase() !== data.topic.toLowerCase()),
+        ...prev.filter((item) => item.topic.toLowerCase() !== data!.topic.toLowerCase()),
       ]);
 
       // Scroll smoothly to response
@@ -130,8 +171,8 @@ export default function App() {
         }
       }, 200);
     } catch (err: any) {
-      console.error("Search error:", err);
-      setError(err.message || "Đã có lỗi nhỏ xảy ra. Con thử bấm 'HỌC NGAY' lại nhé!");
+      console.error("Rendering error:", err);
+      setError(err?.message || "Đã có lỗi nhỏ xảy ra. Con thử bấm lại nhé!");
     } finally {
       setIsLoading(false);
     }

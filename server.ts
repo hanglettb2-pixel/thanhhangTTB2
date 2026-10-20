@@ -337,113 +337,120 @@ CẤU TRÚC BẮT BUỘC TRẢ VỀ THEO 5 PHẦN CHUẨN:
 
 Định dạng trả về: JSON thuần túy theo schema yêu cầu.`;
 
-    const response = await ai.models.generateContent({
-      model: "gemini-3.7-flash",
-      contents: `Học sinh tiểu học ${ageGroup} tuổi muốn học chủ đề "${topic.trim()}" (Thuộc môn: ${subject === "toan" ? "Toán học" : subject === "tieng-viet" ? "Tiếng Việt" : "Toán hoặc Tiếng Việt"}). Hãy giảng bài cho con nhé!`,
-      config: {
-        systemInstruction: systemPrompt,
-        temperature: 0.7,
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: Type.OBJECT,
-          properties: {
-            topic: { type: Type.STRING, description: "Tên chủ đề đã chuẩn hóa" },
-            topicEmoji: { type: Type.STRING, description: "1 emoji đại diện phù hợp nhất cho chủ đề (VD: 🔢, ➕, 📖, ✍️, 🌸, 📐...)" },
-            summaryBadge: { type: Type.STRING, description: "Nhãn phân loại ngắn như: Toán học Cô Hằng, Tiếng Việt diệu kỳ, Bài toán điểm 10, Bí kíp làm văn..." },
-            simpleExplanation: {
-              type: Type.OBJECT,
-              properties: {
-                title: { type: Type.STRING, description: "Tiêu đề bài giảng dịu dàng của Cô Hằng" },
-                content: { type: Type.STRING, description: "Nội dung giải thích chính bằng ngôn ngữ học sinh 6-10 tuổi" },
-                analogy: { type: Type.STRING, description: "Một so sánh ví von gần gũi ('Hãy tưởng tượng như...')" }
+    // Call Gemini 3.8 Flash with a strict 10s timeout to avoid gateway timeouts or hangs
+    const generateWithTimeout = Promise.race([
+      ai.models.generateContent({
+        model: "gemini-3.8-flash",
+        contents: `Học sinh tiểu học ${ageGroup} tuổi muốn học chủ đề "${topic.trim()}" (Thuộc môn: ${subject === "toan" ? "Toán học" : subject === "tieng-viet" ? "Tiếng Việt" : "Toán hoặc Tiếng Việt"}). Hãy giảng bài cho con nhé!`,
+        config: {
+          systemInstruction: systemPrompt,
+          temperature: 0.7,
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: Type.OBJECT,
+            properties: {
+              topic: { type: Type.STRING, description: "Tên chủ đề đã chuẩn hóa" },
+              topicEmoji: { type: Type.STRING, description: "1 emoji đại diện phù hợp nhất cho chủ đề (VD: 🔢, ➕, 📖, ✍️, 🌸, 📐...)" },
+              summaryBadge: { type: Type.STRING, description: "Nhãn phân loại ngắn như: Toán học Cô Hằng, Tiếng Việt diệu kỳ, Bài toán điểm 10, Bí kíp làm văn..." },
+              simpleExplanation: {
+                type: Type.OBJECT,
+                properties: {
+                  title: { type: Type.STRING, description: "Tiêu đề bài giảng dịu dàng của Cô Hằng" },
+                  content: { type: Type.STRING, description: "Nội dung giải thích chính bằng ngôn ngữ học sinh 6-10 tuổi" },
+                  analogy: { type: Type.STRING, description: "Một so sánh ví von gần gũi ('Hãy tưởng tượng như...')" }
+                },
+                required: ["title", "content", "analogy"]
               },
-              required: ["title", "content", "analogy"]
-            },
-            relatableExamples: {
-              type: Type.ARRAY,
-              items: {
-                type: Type.OBJECT,
-                properties: {
-                  title: { type: Type.STRING, description: "Tên ví dụ" },
-                  description: { type: Type.STRING, description: "Mô tả chi tiết ví dụ trong đời sống" },
-                  emoji: { type: Type.STRING, description: "Emoji minh họa cho ví dụ" }
-                },
-                required: ["title", "description", "emoji"]
-              }
-            },
-            keyPoints: {
-              type: Type.ARRAY,
-              description: "Đúng 3 ý quan trọng cần nhớ",
-              items: {
-                type: Type.OBJECT,
-                properties: {
-                  number: { type: Type.INTEGER, description: "Số thứ tự 1, 2, 3" },
-                  title: { type: Type.STRING, description: "Tiêu đề ngắn của ý ghi nhớ" },
-                  takeaway: { type: Type.STRING, description: "Nội dung cốt lõi cần nhớ trong 1-2 câu" },
-                  iconHint: { type: Type.STRING, description: "Biểu tượng hoặc emoji gợi ý" }
-                },
-                required: ["number", "title", "takeaway", "iconHint"]
-              }
-            },
-            flashcards: {
-              type: Type.ARRAY,
-              description: "Đúng 5 thẻ Flashcard ôn tập (Mặt trước: câu hỏi hoặc thuật ngữ; Mặt sau: câu trả lời)",
-              items: {
-                type: Type.OBJECT,
-                properties: {
-                  id: { type: Type.INTEGER, description: "Số thứ tự 1 đến 5" },
-                  front: { type: Type.STRING, description: "Mặt trước: Câu hỏi hoặc thuật ngữ cốt lõi" },
-                  back: { type: Type.STRING, description: "Mặt sau: Câu trả lời hoặc giải thích chi tiết" },
-                  category: { type: Type.STRING, description: "Phân loại ngắn (Thuật ngữ, Quy tắc, Mẹo tính...)" },
-                  emoji: { type: Type.STRING, description: "Emoji minh họa cho thẻ" }
-                },
-                required: ["id", "front", "back", "category", "emoji"]
-              }
-            },
-            quizQuestions: {
-              type: Type.ARRAY,
-              description: "Đúng 3 câu hỏi trắc nghiệm kiểm tra kiến thức",
-              items: {
-                type: Type.OBJECT,
-                properties: {
-                  id: { type: Type.INTEGER, description: "ID câu hỏi (1, 2, 3)" },
-                  question: { type: Type.STRING, description: "Nội dung câu hỏi đố vui" },
-                  options: {
-                    type: Type.ARRAY,
-                    items: { type: Type.STRING },
-                    description: "4 lựa chọn trả lời A, B, C, D"
+              relatableExamples: {
+                type: Type.ARRAY,
+                items: {
+                  type: Type.OBJECT,
+                  properties: {
+                    title: { type: Type.STRING, description: "Tên ví dụ" },
+                    description: { type: Type.STRING, description: "Mô tả chi tiết ví dụ trong đời sống" },
+                    emoji: { type: Type.STRING, description: "Emoji minh họa cho ví dụ" }
                   },
-                  correctIndex: { type: Type.INTEGER, description: "Chỉ số đáp án đúng (0, 1, 2, hoặc 3)" },
-                  hint: { type: Type.STRING, description: "Gợi ý suy nghĩ nhẹ nhàng từ Cô Hằng" },
-                  explanation: { type: Type.STRING, description: "Lời khen ngợi và giải thích của Cô Hằng" },
-                  funFact: { type: Type.STRING, description: "Sự thật thú vị nho nhỏ mở rộng kiến thức" }
-                },
-                required: ["id", "question", "options", "correctIndex", "hint", "explanation", "funFact"]
+                  required: ["title", "description", "emoji"]
+                }
+              },
+              keyPoints: {
+                type: Type.ARRAY,
+                description: "Đúng 3 ý quan trọng cần nhớ",
+                items: {
+                  type: Type.OBJECT,
+                  properties: {
+                    number: { type: Type.INTEGER, description: "Số thứ tự 1, 2, 3" },
+                    title: { type: Type.STRING, description: "Tiêu đề ngắn của ý ghi nhớ" },
+                    takeaway: { type: Type.STRING, description: "Nội dung cốt lõi cần nhớ trong 1-2 câu" },
+                    iconHint: { type: Type.STRING, description: "Biểu tượng hoặc emoji gợi ý" }
+                  },
+                  required: ["number", "title", "takeaway", "iconHint"]
+                }
+              },
+              flashcards: {
+                type: Type.ARRAY,
+                description: "Đúng 5 thẻ Flashcard ôn tập (Mặt trước: câu hỏi hoặc thuật ngữ; Mặt sau: câu trả lời)",
+                items: {
+                  type: Type.OBJECT,
+                  properties: {
+                    id: { type: Type.INTEGER, description: "Số thứ tự 1 đến 5" },
+                    front: { type: Type.STRING, description: "Mặt trước: Câu hỏi hoặc thuật ngữ cốt lõi" },
+                    back: { type: Type.STRING, description: "Mặt sau: Câu trả lời hoặc giải thích chi tiết" },
+                    category: { type: Type.STRING, description: "Phân loại ngắn (Thuật ngữ, Quy tắc, Mẹo tính...)" },
+                    emoji: { type: Type.STRING, description: "Emoji minh họa cho thẻ" }
+                  },
+                  required: ["id", "front", "back", "category", "emoji"]
+                }
+              },
+              quizQuestions: {
+                type: Type.ARRAY,
+                description: "Đúng 3 câu hỏi trắc nghiệm kiểm tra kiến thức",
+                items: {
+                  type: Type.OBJECT,
+                  properties: {
+                    id: { type: Type.INTEGER, description: "ID câu hỏi (1, 2, 3)" },
+                    question: { type: Type.STRING, description: "Nội dung câu hỏi đố vui" },
+                    options: {
+                      type: Type.ARRAY,
+                      items: { type: Type.STRING },
+                      description: "4 lựa chọn trả lời A, B, C, D"
+                    },
+                    correctIndex: { type: Type.INTEGER, description: "Chỉ số đáp án đúng (0, 1, 2, hoặc 3)" },
+                    hint: { type: Type.STRING, description: "Gợi ý suy nghĩ nhẹ nhàng từ Cô Hằng" },
+                    explanation: { type: Type.STRING, description: "Lời khen ngợi và giải thích của Cô Hằng" },
+                    funFact: { type: Type.STRING, description: "Sự thật thú vị nho nhỏ mở rộng kiến thức" }
+                  },
+                  required: ["id", "question", "options", "correctIndex", "hint", "explanation", "funFact"]
+                }
+              },
+              encouragementMessage: { type: Type.STRING, description: "Lời chúc mừng và bông hoa điểm 10 Cô Hằng gửi tặng con" },
+              followUpSuggestions: {
+                type: Type.ARRAY,
+                items: { type: Type.STRING },
+                description: "3 câu hỏi tò mò gợi ý con hỏi tiếp Cô Hằng"
               }
             },
-            encouragementMessage: { type: Type.STRING, description: "Lời chúc mừng và bông hoa điểm 10 Cô Hằng gửi tặng con" },
-            followUpSuggestions: {
-              type: Type.ARRAY,
-              items: { type: Type.STRING },
-              description: "3 câu hỏi tò mò gợi ý con hỏi tiếp Cô Hằng"
-            }
-          },
-          required: [
-            "topic",
-            "topicEmoji",
-            "summaryBadge",
-            "simpleExplanation",
-            "relatableExamples",
-            "keyPoints",
-            "flashcards",
-            "quizQuestions",
-            "encouragementMessage",
-            "followUpSuggestions"
-          ]
+            required: [
+              "topic",
+              "topicEmoji",
+              "summaryBadge",
+              "simpleExplanation",
+              "relatableExamples",
+              "keyPoints",
+              "flashcards",
+              "quizQuestions",
+              "encouragementMessage",
+              "followUpSuggestions"
+            ]
+          }
         }
-      }
-    });
+      }),
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error("AI generation timed out after 10s")), 10000)
+      )
+    ]);
 
+    const response = await generateWithTimeout;
     const responseText = response.text;
     if (!responseText) {
       throw new Error("Không nhận được phản hồi từ Cô Thanh Hằng");
@@ -452,7 +459,7 @@ CẤU TRÚC BẮT BUỘC TRẢ VỀ THEO 5 PHẦN CHUẨN:
     const data = JSON.parse(responseText);
     return res.json(data);
   } catch (error: any) {
-    console.error("Error in /api/learn:", error);
+    console.warn("Using smart fallback response for topic:", req.body?.topic, error?.message);
     const fallback = generateFallbackResponse(req.body?.topic || "Bài học", req.body?.subject);
     return res.json(fallback);
   }
@@ -473,21 +480,26 @@ app.post("/api/ask-followup", async (req, res) => {
       });
     }
 
-    const response = await ai.models.generateContent({
-      model: "gemini-3.7-flash",
-      contents: `Học sinh tiểu học 6-10 tuổi đang học về "${currentTopic || 'Chủ đề'}" và hỏi Cô giáo Thanh Hằng: "${question}".
+    const response = await Promise.race([
+      ai.models.generateContent({
+        model: "gemini-3.8-flash",
+        contents: `Học sinh tiểu học 6-10 tuổi đang học về "${currentTopic || 'Chủ đề'}" và hỏi Cô giáo Thanh Hằng: "${question}".
 Hãy trả lời con với tư cách Cô Thanh Hằng dịu dàng, ân cần, giải thích dễ hiểu về Toán hoặc Tiếng Việt, khích lệ con tự suy nghĩ và khen ngợi con.`,
-      config: {
-        systemInstruction: "Bạn là Cô giáo Thanh Hằng - Trợ lý học tập môn Toán & Tiếng Việt cho học sinh tiểu học (6-10 tuổi).",
-        temperature: 0.7,
-      }
-    });
+        config: {
+          systemInstruction: "Bạn là Cô giáo Thanh Hằng - Trợ lý học tập môn Toán & Tiếng Việt cho học sinh tiểu học (6-10 tuổi).",
+          temperature: 0.7,
+        }
+      }),
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error("Timeout")), 8000)
+      )
+    ]);
 
     return res.json({
       answer: response.text || "Câu hỏi của con rất xuất sắc! Cô Hằng rất tự hào về tinh thần tự học của con!"
     });
   } catch (error) {
-    console.error("Error in /api/ask-followup:", error);
+    console.warn("Error/timeout in /api/ask-followup:", error);
     return res.json({
       answer: "Cô Thanh Hằng rất vui vì con đã chủ động đặt câu hỏi! Hãy cùng cô tiếp tục khám phá bài học nhé!"
     });
