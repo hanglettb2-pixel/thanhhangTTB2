@@ -69,16 +69,16 @@ export const FlashcardsModal: React.FC<FlashcardsModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="bg-white rounded-3xl w-full max-w-lg p-6 border-2 border-rose-300 shadow-2xl relative overflow-hidden flex flex-col items-center">
+      <div className="bg-white rounded-3xl w-full max-w-lg p-6 border-2 border-blue-300 shadow-2xl relative overflow-hidden flex flex-col items-center">
         {/* Header */}
-        <div className="w-full flex items-center justify-between pb-3 mb-4 border-b border-rose-100">
+        <div className="w-full flex items-center justify-between pb-3 mb-4 border-b border-blue-100">
           <div className="flex items-center gap-2">
-            <span className="text-2xl">{currentCard.emoji || topicEmoji || "🌸"}</span>
+            <span className="text-2xl">{currentCard.emoji || topicEmoji || "📘"}</span>
             <div>
               <h3 className="font-black text-slate-800 text-lg">
                 5 Thẻ Flashcard Của Cô Hằng
               </h3>
-              <p className="text-xs text-rose-500 font-medium">{topic}</p>
+              <p className="text-xs text-blue-600 font-medium">{topic}</p>
             </div>
           </div>
           <button
@@ -100,8 +100,8 @@ export const FlashcardsModal: React.FC<FlashcardsModalProps> = ({
               key={idx}
               className={`h-2 rounded-full transition-all ${
                 idx === currentIndex
-                  ? "w-8 bg-rose-500"
-                  : "w-2 bg-rose-200"
+                  ? "w-8 bg-blue-600"
+                  : "w-2 bg-blue-200"
               }`}
             />
           ))}
@@ -113,19 +113,19 @@ export const FlashcardsModal: React.FC<FlashcardsModalProps> = ({
         {/* Flip Flashcard container */}
         <div
           onClick={() => setIsFlipped(!isFlipped)}
-          className="w-full h-64 sm:h-72 rounded-3xl bg-gradient-to-tr from-rose-500 via-pink-400 to-rose-400 p-1 cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300 transform active:scale-98"
+          className="w-full h-64 sm:h-72 rounded-3xl bg-gradient-to-tr from-blue-600 via-sky-400 to-blue-500 p-1 cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300 transform active:scale-98"
         >
           <div className="w-full h-full bg-white rounded-[22px] p-6 flex flex-col justify-between items-center text-center relative">
             <div className="w-full flex items-center justify-between">
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-100 text-rose-800 text-xs font-black">
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-blue-100 text-blue-900 text-xs font-black">
                 {!isFlipped ? (
                   <>
-                    <HelpCircle className="w-3 h-3 text-rose-600" />
+                    <HelpCircle className="w-3 h-3 text-blue-600" />
                     <span>Mặt trước: Câu hỏi</span>
                   </>
                 ) : (
                   <>
-                    <BookOpen className="w-3 h-3 text-rose-600" />
+                    <BookOpen className="w-3 h-3 text-sky-600" />
                     <span>Mặt sau: Câu trả lời</span>
                   </>
                 )}
@@ -133,7 +133,7 @@ export const FlashcardsModal: React.FC<FlashcardsModalProps> = ({
               <button
                 type="button"
                 onClick={handleReadCard}
-                className="p-1.5 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-600 transition-all"
+                className="p-1.5 rounded-full bg-blue-50 hover:bg-blue-100 text-blue-600 transition-all"
                 title="Đọc nội dung thẻ"
               >
                 <Volume2 className="w-4 h-4" />
@@ -149,7 +149,7 @@ export const FlashcardsModal: React.FC<FlashcardsModalProps> = ({
                 <h4 className="text-xl sm:text-2xl font-black text-slate-800 leading-snug">
                   {currentCard.front}
                 </h4>
-                <p className="text-xs font-bold text-rose-600 flex items-center justify-center gap-1">
+                <p className="text-xs font-bold text-blue-600 flex items-center justify-center gap-1">
                   <Sparkles className="w-3.5 h-3.5" />
                   <span>Bấm vào thẻ để lật xem câu trả lời</span>
                 </p>
@@ -170,7 +170,7 @@ export const FlashcardsModal: React.FC<FlashcardsModalProps> = ({
             )}
 
             <div className="text-[11px] font-semibold text-slate-400 flex items-center gap-1">
-              <RotateCcw className="w-3 h-3 text-rose-400" />
+              <RotateCcw className="w-3 h-3 text-blue-400" />
               <span>Chạm vào thẻ để lật 2 mặt</span>
             </div>
           </div>
@@ -190,7 +190,7 @@ export const FlashcardsModal: React.FC<FlashcardsModalProps> = ({
           <button
             type="button"
             onClick={handleNext}
-            className="flex items-center gap-1 px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-black shadow-md shadow-rose-200 transition-all cursor-pointer active:scale-98"
+            className="flex items-center gap-1 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-black shadow-md shadow-blue-200 transition-all cursor-pointer active:scale-98"
           >
             <span>Card tiếp theo</span>
             <ChevronRight className="w-4 h-4" />

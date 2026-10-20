@@ -106,17 +106,17 @@ export const FlashcardsSection: React.FC<FlashcardsSectionProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-3xl p-6 sm:p-8 border-2 border-rose-200 shadow-md">
+    <div className="bg-white rounded-3xl p-6 sm:p-8 border-2 border-blue-200 shadow-md">
       {/* Section Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-rose-100">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-blue-100">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-pink-500 to-rose-500 flex items-center justify-center text-white shadow-sm font-bold text-lg">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-sky-500 to-blue-600 flex items-center justify-center text-white shadow-sm font-bold text-lg">
             📇
           </div>
           <div>
             <h3 className="text-xl sm:text-2xl font-black text-slate-800 flex items-center gap-2">
               <span>5 Thẻ Flashcard Ôn Tập Cùng Cô Hằng</span>
-              <Sparkles className="w-5 h-5 text-rose-500" />
+              <Sparkles className="w-5 h-5 text-blue-600" />
             </h3>
             <p className="text-xs sm:text-sm text-slate-500 font-medium">
               Chạm vào thẻ để lật xem mặt trước (câu hỏi/thuật ngữ) và mặt sau (câu trả lời)
@@ -126,8 +126,8 @@ export const FlashcardsSection: React.FC<FlashcardsSectionProps> = ({
 
         {/* Counter Badge */}
         <div className="flex items-center gap-2 self-start sm:self-auto">
-          <div className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-rose-50 border border-rose-200 text-rose-800 text-xs sm:text-sm font-black">
-            <Layers className="w-4 h-4 text-rose-500" />
+          <div className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-800 text-xs sm:text-sm font-black">
+            <Layers className="w-4 h-4 text-blue-600" />
             <span>Thẻ {currentIndex + 1} / {totalCards}</span>
           </div>
         </div>
@@ -145,10 +145,10 @@ export const FlashcardsSection: React.FC<FlashcardsSectionProps> = ({
               onClick={() => handleSelectCard(idx)}
               className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
                 isCurrent
-                  ? "w-10 bg-rose-500 shadow-xs"
+                  ? "w-10 bg-blue-600 shadow-xs"
                   : isViewed
-                  ? "w-4 bg-rose-300 hover:bg-rose-400"
-                  : "w-2.5 bg-rose-100 hover:bg-rose-200"
+                  ? "w-4 bg-blue-300 hover:bg-blue-400"
+                  : "w-2.5 bg-blue-100 hover:bg-blue-200"
               }`}
               title={`Chuyển đến Flashcard ${idx + 1}`}
             />
@@ -161,7 +161,7 @@ export const FlashcardsSection: React.FC<FlashcardsSectionProps> = ({
         <div
           id={`flashcard-${currentIndex}`}
           onClick={handleFlip}
-          className="w-full min-h-[280px] sm:min-h-[300px] rounded-3xl p-1 cursor-pointer transition-all duration-300 transform active:scale-[0.99] shadow-md hover:shadow-lg bg-gradient-to-tr from-rose-500 via-pink-400 to-rose-400 select-none group"
+          className="w-full min-h-[280px] sm:min-h-[300px] rounded-3xl p-1 cursor-pointer transition-all duration-300 transform active:scale-[0.99] shadow-md hover:shadow-lg bg-gradient-to-tr from-blue-600 via-sky-400 to-blue-500 select-none group"
         >
           <div className="w-full h-full min-h-[272px] sm:min-h-[292px] bg-white rounded-[22px] p-6 sm:p-7 flex flex-col justify-between items-center text-center relative overflow-hidden">
             
@@ -170,18 +170,18 @@ export const FlashcardsSection: React.FC<FlashcardsSectionProps> = ({
               <span
                 className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black transition-colors ${
                   !isFlipped
-                    ? "bg-rose-100 text-rose-800 border border-rose-200"
-                    : "bg-pink-100 text-pink-900 border border-pink-200"
+                    ? "bg-blue-50 text-blue-900 border border-blue-200"
+                    : "bg-sky-50 text-sky-950 border border-sky-200"
                 }`}
               >
                 {!isFlipped ? (
                   <>
-                    <HelpCircle className="w-3.5 h-3.5 text-rose-600" />
+                    <HelpCircle className="w-3.5 h-3.5 text-blue-600" />
                     <span>Mặt trước: Câu hỏi / Thuật ngữ</span>
                   </>
                 ) : (
                   <>
-                    <BookOpen className="w-3.5 h-3.5 text-pink-600" />
+                    <BookOpen className="w-3.5 h-3.5 text-sky-600" />
                     <span>Mặt sau: Câu trả lời</span>
                   </>
                 )}
@@ -197,7 +197,7 @@ export const FlashcardsSection: React.FC<FlashcardsSectionProps> = ({
                   <button
                     type="button"
                     onClick={handleSpeak}
-                    className="p-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 transition-all cursor-pointer"
+                    className="p-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-600 transition-all cursor-pointer"
                     title="Nghe Cô Hằng đọc thẻ này"
                   >
                     <Volume2 className="w-4 h-4" />
@@ -210,13 +210,13 @@ export const FlashcardsSection: React.FC<FlashcardsSectionProps> = ({
             {!isFlipped ? (
               // FRONT SIDE: Question or Term
               <div className="my-auto py-4 space-y-3 animate-in fade-in zoom-in-95 duration-200">
-                <div className="w-14 h-14 mx-auto rounded-2xl bg-rose-50 border border-rose-200 flex items-center justify-center text-3xl shadow-2xs">
-                  {currentCard.emoji || topicEmoji || "🌸"}
+                <div className="w-14 h-14 mx-auto rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-3xl shadow-2xs">
+                  {currentCard.emoji || topicEmoji || "📘"}
                 </div>
                 <h4 className="text-xl sm:text-2xl font-black text-slate-800 leading-snug px-2">
                   {currentCard.front}
                 </h4>
-                <p className="text-xs font-bold text-rose-600 flex items-center justify-center gap-1.5">
+                <p className="text-xs font-bold text-blue-600 flex items-center justify-center gap-1.5">
                   <RotateCcw className="w-3.5 h-3.5" />
                   <span>Bấm vào thẻ để lật xem câu trả lời của Cô Hằng</span>
                 </p>
@@ -240,7 +240,7 @@ export const FlashcardsSection: React.FC<FlashcardsSectionProps> = ({
             {/* Bottom Status bar */}
             <div className="w-full pt-2 flex items-center justify-between text-[11px] font-bold text-slate-400 border-t border-slate-100">
               <span>Flashcard {currentIndex + 1}/{totalCards}</span>
-              <span className="text-rose-500 font-semibold flex items-center gap-1">
+              <span className="text-blue-600 font-semibold flex items-center gap-1">
                 <RotateCcw className="w-3 h-3" />
                 Chạm để lật
               </span>
@@ -254,7 +254,7 @@ export const FlashcardsSection: React.FC<FlashcardsSectionProps> = ({
             id="prev-flashcard-btn"
             type="button"
             onClick={handlePrev}
-            className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-800 text-sm font-black transition-all cursor-pointer shadow-xs active:scale-98"
+            className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-800 text-sm font-black transition-all cursor-pointer shadow-xs active:scale-98"
           >
             <ChevronLeft className="w-4 h-4" />
             <span>Card trước</span>
@@ -275,7 +275,7 @@ export const FlashcardsSection: React.FC<FlashcardsSectionProps> = ({
             id="next-flashcard-btn"
             type="button"
             onClick={handleNext}
-            className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white text-sm font-black transition-all cursor-pointer shadow-md shadow-rose-200 active:scale-98"
+            className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-black transition-all cursor-pointer shadow-md shadow-blue-200 active:scale-98"
           >
             <span>Card tiếp theo</span>
             <ChevronRight className="w-4 h-4" />
@@ -284,14 +284,14 @@ export const FlashcardsSection: React.FC<FlashcardsSectionProps> = ({
 
         {/* Reward celebration banner when finished all 5 cards */}
         {viewedCards.size === totalCards && (
-          <div className="mt-4 p-3.5 rounded-2xl bg-gradient-to-r from-rose-50 to-pink-50 border border-rose-200 flex items-center justify-between animate-in fade-in duration-300">
+          <div className="mt-4 p-3.5 rounded-2xl bg-gradient-to-r from-blue-50 to-sky-50 border border-blue-200 flex items-center justify-between animate-in fade-in duration-300">
             <div className="flex items-center gap-2.5">
-              <span className="text-2xl">🌸</span>
-              <p className="text-xs sm:text-sm font-bold text-rose-900">
+              <span className="text-2xl">📘</span>
+              <p className="text-xs sm:text-sm font-bold text-blue-900">
                 Chúc mừng con đã ôn tập trọn vẹn cả 5 thẻ Flashcard!
               </p>
             </div>
-            <div className="flex items-center gap-1 text-xs font-black text-rose-700 bg-white px-2.5 py-1 rounded-xl shadow-2xs border border-rose-100">
+            <div className="flex items-center gap-1 text-xs font-black text-blue-800 bg-white px-2.5 py-1 rounded-xl shadow-2xs border border-blue-100">
               <Sparkles className="w-3.5 h-3.5 text-amber-500" />
               <span>+2 Hoa Điểm 10</span>
             </div>

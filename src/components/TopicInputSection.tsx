@@ -75,19 +75,19 @@ export const TopicInputSection: React.FC<TopicInputSectionProps> = ({
 
   return (
     <section className="w-full max-w-4xl mx-auto px-4 py-3 sm:py-5">
-      <div className="bg-gradient-to-b from-rose-50 via-white to-pink-50/60 rounded-3xl p-5 sm:p-8 border-2 border-rose-200 shadow-xl shadow-rose-100/50 relative overflow-hidden">
+      <div className="bg-gradient-to-b from-sky-50/80 via-white to-blue-50/60 rounded-3xl p-5 sm:p-8 border-2 border-blue-200 shadow-xl shadow-blue-100/50 relative overflow-hidden">
         {/* Playful background decorative shapes */}
-        <div className="absolute -top-12 -right-12 w-40 h-40 bg-rose-200/30 rounded-full blur-2xl pointer-events-none" />
-        <div className="absolute -bottom-10 -left-10 w-36 h-36 bg-pink-200/30 rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute -top-12 -right-12 w-40 h-40 bg-sky-200/30 rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute -bottom-10 -left-10 w-36 h-36 bg-blue-200/30 rounded-full blur-2xl pointer-events-none" />
 
         {/* Section Heading with Cô Thanh Hằng Badge */}
         <div className="text-center max-w-2xl mx-auto mb-6">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-rose-100 border border-rose-300 text-rose-800 text-xs sm:text-sm font-bold mb-3 shadow-xs">
-            <Sparkles className="w-4 h-4 text-rose-500 animate-spin" />
-            Cô Thanh Hằng chào các bạn nhỏ yêu quý! 🌸
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-900 text-xs sm:text-sm font-bold mb-3 shadow-xs">
+            <Sparkles className="w-4 h-4 text-blue-500 animate-spin" />
+            <span>Cô Lê Thị Thanh Hằng - Trường Tiểu học Tân Thành Bình chào các em học sinh! 📘</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
-            Hôm nay con muốn học <span className="text-rose-600">Toán</span> hay <span className="text-pink-600">Tiếng Việt</span>?
+            Hôm nay con muốn học <span className="text-blue-600">Toán</span> hay <span className="text-sky-600">Tiếng Việt</span>?
           </h2>
           <p className="text-sm sm:text-base text-slate-600 font-medium mt-2">
             Cô Thanh Hằng sẽ hướng dẫn con cách tư duy dễ hiểu, ví dụ sinh động và 3 câu đố nhận hoa điểm 10 nhé!
@@ -101,11 +101,11 @@ export const TopicInputSection: React.FC<TopicInputSectionProps> = ({
             onClick={() => setSubject("all")}
             className={`flex items-center gap-1.5 px-4 py-2 rounded-2xl text-xs sm:text-sm font-black transition-all cursor-pointer ${
               subject === "all"
-                ? "bg-rose-500 text-white shadow-md shadow-rose-300/60 scale-105"
-                : "bg-white text-slate-600 border border-rose-200 hover:bg-rose-50"
+                ? "bg-blue-600 text-white shadow-md shadow-blue-300/60 scale-105"
+                : "bg-white text-slate-600 border border-blue-200 hover:bg-blue-50"
             }`}
           >
-            <span>🌸</span>
+            <span>📘</span>
             <span>Tất cả môn</span>
           </button>
 
@@ -114,8 +114,8 @@ export const TopicInputSection: React.FC<TopicInputSectionProps> = ({
             onClick={() => setSubject("toan")}
             className={`flex items-center gap-1.5 px-4 py-2 rounded-2xl text-xs sm:text-sm font-black transition-all cursor-pointer ${
               subject === "toan"
-                ? "bg-rose-600 text-white shadow-md shadow-rose-300/60 scale-105"
-                : "bg-white text-rose-700 border border-rose-200 hover:bg-rose-50"
+                ? "bg-blue-700 text-white shadow-md shadow-blue-300/60 scale-105"
+                : "bg-white text-blue-700 border border-blue-200 hover:bg-blue-50"
             }`}
           >
             <span>🔢</span>
@@ -127,8 +127,8 @@ export const TopicInputSection: React.FC<TopicInputSectionProps> = ({
             onClick={() => setSubject("tieng-viet")}
             className={`flex items-center gap-1.5 px-4 py-2 rounded-2xl text-xs sm:text-sm font-black transition-all cursor-pointer ${
               subject === "tieng-viet"
-                ? "bg-pink-600 text-white shadow-md shadow-pink-300/60 scale-105"
-                : "bg-white text-pink-700 border border-pink-200 hover:bg-pink-50"
+                ? "bg-sky-600 text-white shadow-md shadow-sky-300/60 scale-105"
+                : "bg-white text-sky-700 border border-sky-200 hover:bg-sky-50"
             }`}
           >
             <span>📖</span>
@@ -144,7 +144,7 @@ export const TopicInputSection: React.FC<TopicInputSectionProps> = ({
             onClick={() => setAgeGroup("6-7")}
             className={`px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer ${
               ageGroup === "6-7"
-                ? "bg-rose-100 text-rose-900 border-2 border-rose-400 shadow-2xs font-extrabold"
+                ? "bg-blue-100 text-blue-950 border-2 border-blue-400 shadow-2xs font-extrabold"
                 : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
             }`}
           >
@@ -155,7 +155,7 @@ export const TopicInputSection: React.FC<TopicInputSectionProps> = ({
             onClick={() => setAgeGroup("8-10")}
             className={`px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer ${
               ageGroup === "8-10"
-                ? "bg-rose-100 text-rose-900 border-2 border-rose-400 shadow-2xs font-extrabold"
+                ? "bg-blue-100 text-blue-950 border-2 border-blue-400 shadow-2xs font-extrabold"
                 : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
             }`}
           >
@@ -165,9 +165,9 @@ export const TopicInputSection: React.FC<TopicInputSectionProps> = ({
 
         {/* Main Input Form with Ô nhập chủ đề & Nút HỌC NGAY */}
         <form onSubmit={handleSubmit} className="relative max-w-3xl mx-auto">
-          <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 bg-white p-2 sm:p-2.5 rounded-2xl sm:rounded-3xl border-2 border-rose-300 shadow-md shadow-rose-200/40 focus-within:border-rose-500 focus-within:ring-4 focus-within:ring-rose-200/50 transition-all">
+          <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 bg-white p-2 sm:p-2.5 rounded-2xl sm:rounded-3xl border-2 border-blue-300 shadow-md shadow-blue-100/50 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-100 transition-all">
             <div className="relative flex-1 flex items-center pl-3">
-              <Search className="w-6 h-6 text-rose-500 mr-2 shrink-0" />
+              <Search className="w-6 h-6 text-blue-600 mr-2 shrink-0" />
               <input
                 id="topic-input-field"
                 type="text"
@@ -203,7 +203,7 @@ export const TopicInputSection: React.FC<TopicInputSectionProps> = ({
               className={`flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl font-black text-base sm:text-lg tracking-wide uppercase shadow-md transition-all ${
                 isLoading || !topic.trim()
                   ? "bg-slate-200 text-slate-400 cursor-not-allowed shadow-none"
-                  : "bg-gradient-to-r from-rose-500 via-pink-500 to-rose-600 text-white hover:from-rose-600 hover:to-pink-600 active:scale-95 shadow-rose-300/60 cursor-pointer"
+                  : "bg-gradient-to-r from-blue-600 via-sky-600 to-blue-700 text-white hover:from-blue-700 hover:to-sky-700 active:scale-95 shadow-blue-300/60 cursor-pointer"
               }`}
             >
               {isLoading ? (
@@ -213,7 +213,7 @@ export const TopicInputSection: React.FC<TopicInputSectionProps> = ({
                 </>
               ) : (
                 <>
-                  <Sparkles className="w-5 h-5 text-rose-100 fill-white animate-bounce" />
+                  <Sparkles className="w-5 h-5 text-blue-100 fill-white animate-bounce" />
                   <span>HỌC NGAY</span>
                 </>
               )}
@@ -224,7 +224,7 @@ export const TopicInputSection: React.FC<TopicInputSectionProps> = ({
         {/* Quick Suggestions Chips */}
         <div className="mt-5 max-w-3xl mx-auto">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold text-rose-700 flex items-center gap-1.5">
+            <span className="text-xs font-bold text-blue-800 flex items-center gap-1.5">
               <Lightbulb className="w-4 h-4 text-amber-500" />
               <span>Gợi ý bài học nổi bật của Cô Hằng:</span>
             </span>
@@ -237,11 +237,11 @@ export const TopicInputSection: React.FC<TopicInputSectionProps> = ({
                 type="button"
                 onClick={() => handleSuggestionClick(item.label)}
                 disabled={isLoading}
-                className="group flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-rose-50 border border-rose-200 hover:border-rose-400 text-slate-700 hover:text-rose-900 font-semibold text-xs sm:text-sm shadow-2xs hover:shadow-xs transition-all cursor-pointer active:scale-95"
+                className="group flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-blue-50 border border-blue-100 hover:border-blue-300 text-slate-700 hover:text-blue-900 font-semibold text-xs sm:text-sm shadow-2xs hover:shadow-xs transition-all cursor-pointer active:scale-95"
               >
                 <span className="text-base">{item.icon}</span>
                 <span>{item.label}</span>
-                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-rose-50 group-hover:bg-rose-200/70 text-rose-700 group-hover:text-rose-900 border border-rose-100">
+                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-blue-50 group-hover:bg-blue-200/70 text-blue-700 group-hover:text-blue-900 border border-blue-100">
                   {item.badge}
                 </span>
               </button>

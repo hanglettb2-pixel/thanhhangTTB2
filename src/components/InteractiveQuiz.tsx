@@ -107,27 +107,27 @@ export const InteractiveQuiz: React.FC<InteractiveQuizProps> = ({
   const isFinished = totalAnswered === questions.length;
 
   return (
-    <div className="bg-gradient-to-br from-white via-rose-50/40 to-pink-50/50 rounded-3xl p-5 sm:p-7 border-2 border-rose-200 shadow-md">
+    <div className="bg-gradient-to-br from-white via-sky-50/40 to-blue-50/50 rounded-3xl p-5 sm:p-7 border-2 border-blue-200 shadow-md">
       {/* Quiz Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-rose-100">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-blue-100">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-pink-500 to-rose-500 flex items-center justify-center text-white shadow-sm font-bold text-lg">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-sky-500 to-blue-600 flex items-center justify-center text-white shadow-sm font-bold text-lg">
             4️⃣
           </div>
           <div>
             <h3 className="text-xl sm:text-2xl font-black text-slate-800 flex items-center gap-2">
               <span>3 Câu Đố Kiểm Tra Cùng Cô Hằng</span>
-              <HelpCircle className="w-5 h-5 text-rose-500" />
+              <HelpCircle className="w-5 h-5 text-blue-600" />
             </h3>
             <p className="text-xs sm:text-sm text-slate-500 font-medium">
-              Thử tài trả lời đúng để nhận Hoa Điểm 10 và Sao Thưởng nhé! 🌸
+              Thử tài trả lời đúng để nhận Hoa Điểm 10 và Sao Thưởng nhé! 📘
             </p>
           </div>
         </div>
 
         {/* Progress & Reset */}
         <div className="flex items-center gap-3 self-start sm:self-auto">
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-100 border border-rose-200 text-rose-900 text-xs sm:text-sm font-black">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-900 text-xs sm:text-sm font-black">
             <Star className="w-4 h-4 text-amber-500 fill-amber-400" />
             <span>Đã làm: {totalAnswered}/{questions.length} câu</span>
           </div>
@@ -147,10 +147,10 @@ export const InteractiveQuiz: React.FC<InteractiveQuizProps> = ({
 
       {/* Completion Banner */}
       {isFinished && (
-        <div className="mb-6 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-rose-500 via-pink-500 to-rose-600 text-white shadow-md flex flex-col sm:flex-row items-center justify-between gap-4 animate-in fade-in zoom-in-95 duration-300">
+        <div className="mb-6 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-blue-600 via-sky-600 to-blue-700 text-white shadow-md flex flex-col sm:flex-row items-center justify-between gap-4 animate-in fade-in zoom-in-95 duration-300">
           <div className="flex items-center gap-3 text-center sm:text-left">
             <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-3xl shadow-inner shrink-0">
-              {correctCount === 3 ? "🌸" : correctCount === 2 ? "⭐" : "💖"}
+              {correctCount === 3 ? "🏆" : correctCount === 2 ? "⭐" : "💡"}
             </div>
             <div>
               <h4 className="font-black text-lg sm:text-xl">
@@ -162,7 +162,7 @@ export const InteractiveQuiz: React.FC<InteractiveQuizProps> = ({
               </h4>
               <p className="text-white/95 text-xs sm:text-sm font-medium">
                 {correctCount === 3
-                  ? "Cô Thanh Hằng tặng con trọn vẹn 3 Bông hoa điểm 10 rực rỡ! 🌸🌸🌸"
+                  ? "Cô Thanh Hằng tặng con trọn vẹn 3 Bông hoa điểm 10 rực rỡ! 🌟🌟🌟"
                   : "Con có thể bấm 'Làm lại' để tự tin đạt trọn điểm 10 nhé!"}
               </p>
             </div>
@@ -190,13 +190,13 @@ export const InteractiveQuiz: React.FC<InteractiveQuizProps> = ({
                   ? isCorrect
                     ? "bg-emerald-50/70 border-emerald-300 shadow-xs"
                     : "bg-rose-50/70 border-rose-300 shadow-xs"
-                  : "bg-white border-slate-200 hover:border-rose-300 shadow-xs"
+                  : "bg-white border-slate-200 hover:border-blue-300 shadow-xs"
               }`}
             >
               {/* Question Top Row */}
               <div className="flex items-start justify-between gap-3 mb-3">
                 <div className="flex items-start gap-2.5">
-                  <span className="w-7 h-7 rounded-xl bg-rose-100 border border-rose-300 text-rose-900 font-black text-xs flex items-center justify-center shrink-0 mt-0.5">
+                  <span className="w-7 h-7 rounded-xl bg-blue-50 border border-blue-200 text-blue-900 font-black text-xs flex items-center justify-center shrink-0 mt-0.5">
                     {qIndex + 1}
                   </span>
                   <h4 className="font-black text-slate-900 text-base sm:text-lg leading-snug">
@@ -210,8 +210,8 @@ export const InteractiveQuiz: React.FC<InteractiveQuizProps> = ({
                   onClick={() => handleToggleHint(qIndex)}
                   className={`shrink-0 inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                     isHintOpen
-                      ? "bg-rose-500 text-white shadow-xs"
-                      : "bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200"
+                      ? "bg-blue-600 text-white shadow-xs"
+                      : "bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200"
                   }`}
                   title="Xem gợi ý từ Cô Hằng để con tự suy nghĩ"
                 >
@@ -222,8 +222,8 @@ export const InteractiveQuiz: React.FC<InteractiveQuizProps> = ({
 
               {/* Hint Box if Revealed */}
               {isHintOpen && (
-                <div className="mb-4 p-3.5 rounded-xl bg-rose-100/90 border border-rose-300 text-rose-950 text-xs sm:text-sm font-medium flex items-start gap-2 animate-in fade-in duration-200">
-                  <Lightbulb className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                <div className="mb-4 p-3.5 rounded-xl bg-blue-50 border border-blue-200 text-blue-950 text-xs sm:text-sm font-medium flex items-start gap-2 animate-in fade-in duration-200">
+                  <Lightbulb className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
                   <div>
                     <span className="font-bold">Cô Hằng gợi ý cho con: </span>
                     <span>{q.hint}</span>
@@ -238,7 +238,7 @@ export const InteractiveQuiz: React.FC<InteractiveQuizProps> = ({
                   const isThisCorrect = optIdx === q.correctIndex;
 
                   let buttonStyle =
-                    "bg-white border-slate-200 hover:border-rose-300 hover:bg-rose-50/50 text-slate-800";
+                    "bg-white border-slate-200 hover:border-blue-300 hover:bg-blue-50/50 text-slate-800";
                   let letterBadgeStyle = "bg-slate-100 text-slate-700";
 
                   if (hasAnswered) {
@@ -293,15 +293,15 @@ export const InteractiveQuiz: React.FC<InteractiveQuizProps> = ({
                     <Award className="w-4 h-4 shrink-0 mt-0.5 text-emerald-600" />
                     <div>
                       <span className="font-bold">
-                        {isCorrect ? "🌸 Cô khen con giỏi lắm! " : "💡 Lời giảng của Cô Hằng: "}
+                        {isCorrect ? "🌟 Cô khen con giỏi lắm! " : "💡 Lời giảng của Cô Hằng: "}
                       </span>
                       <span>{q.explanation}</span>
                     </div>
                   </div>
 
                   {q.funFact && (
-                    <div className="p-2.5 rounded-xl bg-pink-50 border border-pink-200 text-pink-900 flex items-start gap-2">
-                      <Sparkles className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
+                    <div className="p-2.5 rounded-xl bg-sky-50 border border-sky-200 text-sky-950 flex items-start gap-2">
+                      <Sparkles className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
                       <div>
                         <span className="font-bold">Góc mở rộng của Cô: </span>
                         <span>{q.funFact}</span>

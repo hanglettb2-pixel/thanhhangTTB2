@@ -69,7 +69,7 @@ export const AIResponseDisplay: React.FC<AIResponseDisplayProps> = ({
   };
 
   const handleCopySummary = () => {
-    const summaryText = `🌸 BÀI HỌC CÙNG CÔ THANH HẰNG: ${data.topic}\n\n1. GIẢI THÍCH ĐƠN GIẢN:\n${data.simpleExplanation.content}\n${data.simpleExplanation.analogy}\n\n2. VÍ DỤ DỄ HIỂU:\n${data.relatableExamples.map((e) => `- ${e.title}: ${e.description}`).join("\n")}\n\n3. 3 Ý QUAN TRỌNG CẦN NHỚ:\n${data.keyPoints.map((k) => `${k.number}. ${k.title}: ${k.takeaway}`).join("\n")}`;
+    const summaryText = `🌸 BÀI HỌC CÙNG CÔ THANH HẰNG: ${data.topic}\n\n1. GIẢI THÍCH ĐƠN GIẢN:\n${data.simpleExplanation.content}\n${data.simpleExplanation.analogy}\n\n2. VÍ DỤ DỄ HIỂU:\n${data.relatableExamples.map((e) => `- ${e.title}: ${e.description}`).join("\n")}\n\n3. 3 Ý QUAN TRỌNG CẦN NHỚ:\n${data.keyPoints.map((k) => `${k.number}. ${k.title}: ${k.takeaway}`).join("\n")}\n\n© Bản quyền: Cô Lê Thị Thanh Hằng - Trường Tiểu học Tân Thành Bình`;
 
     navigator.clipboard.writeText(summaryText);
     setCopied(true);
@@ -112,15 +112,15 @@ export const AIResponseDisplay: React.FC<AIResponseDisplayProps> = ({
 
   return (
     <div id="ai-response-area" className="w-full max-w-4xl mx-auto px-4 py-4 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      {/* Top Banner Card: Topic Title, Badge, and Action Buttons in Pink-Rose */}
-      <div className="bg-gradient-to-r from-rose-500 via-pink-500 to-rose-600 rounded-3xl p-6 sm:p-8 text-white shadow-xl shadow-rose-200/60 relative overflow-hidden">
+      {/* Top Banner Card: Topic Title, Badge, and Action Buttons in Blue-Sky */}
+      <div className="bg-gradient-to-r from-blue-600 via-sky-600 to-blue-700 rounded-3xl p-6 sm:p-8 text-white shadow-xl shadow-blue-200/50 relative overflow-hidden">
         <div className="absolute top-0 right-0 -mt-8 -mr-8 w-44 h-44 bg-white/10 rounded-full blur-2xl pointer-events-none" />
-        <div className="absolute bottom-0 left-10 -mb-6 w-32 h-32 bg-pink-300/20 rounded-full blur-xl pointer-events-none" />
+        <div className="absolute bottom-0 left-10 -mb-6 w-32 h-32 bg-sky-300/20 rounded-full blur-xl pointer-events-none" />
 
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
           <div className="flex items-start gap-4">
             <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-white/20 backdrop-blur-md flex items-center justify-center text-4xl sm:text-5xl shadow-inner border border-white/30 shrink-0">
-              {data.topicEmoji || "🌸"}
+              {data.topicEmoji || "📘"}
             </div>
             <div>
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-xs sm:text-sm font-bold mb-2 border border-white/30">
@@ -130,8 +130,10 @@ export const AIResponseDisplay: React.FC<AIResponseDisplayProps> = ({
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight leading-tight">
                 {data.topic}
               </h2>
-              <p className="text-white/95 text-xs sm:text-sm font-semibold mt-1 flex items-center gap-1.5">
-                <span>👩‍🏫 Bài giảng 4 bước cùng Cô giáo Thanh Hằng</span>
+              <p className="text-white/95 text-xs sm:text-sm font-semibold mt-1 flex flex-wrap items-center gap-1.5">
+                <span>👩‍🏫 Bài giảng của Cô Lê Thị Thanh Hằng</span>
+                <span className="text-white/60">•</span>
+                <span>Trường Tiểu học Tân Thành Bình</span>
               </p>
             </div>
           </div>
@@ -144,8 +146,8 @@ export const AIResponseDisplay: React.FC<AIResponseDisplayProps> = ({
                 onClick={handleToggleReadAloud}
                 className={`flex items-center gap-1.5 px-4 py-2.5 rounded-2xl font-black text-xs sm:text-sm transition-all shadow-md cursor-pointer ${
                   isPlayingAudio
-                    ? "bg-rose-900 text-white animate-pulse"
-                    : "bg-white text-rose-700 hover:bg-rose-50"
+                    ? "bg-blue-950 text-white animate-pulse"
+                    : "bg-white text-blue-700 hover:bg-blue-50"
                 }`}
                 title="Nghe Cô Hằng đọc bài giảng"
               >
@@ -156,7 +158,7 @@ export const AIResponseDisplay: React.FC<AIResponseDisplayProps> = ({
                   </>
                 ) : (
                   <>
-                    <Volume2 className="w-4 h-4 text-rose-500" />
+                    <Volume2 className="w-4 h-4 text-blue-600" />
                     <span>Cô Hằng Đọc</span>
                   </>
                 )}
@@ -189,16 +191,16 @@ export const AIResponseDisplay: React.FC<AIResponseDisplayProps> = ({
       {/* ======================================================== */}
       <section
         id="section-1-simple-explanation"
-        className="bg-white rounded-3xl p-6 sm:p-8 border-2 border-rose-200 shadow-md relative"
+        className="bg-white rounded-3xl p-6 sm:p-8 border-2 border-blue-200 shadow-md relative"
       >
-        <div className="flex items-center gap-3 mb-5 pb-3 border-b border-rose-100">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-rose-500 to-pink-400 flex items-center justify-center text-white shadow-sm font-bold text-lg">
+        <div className="flex items-center gap-3 mb-5 pb-3 border-b border-blue-100">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 to-sky-500 flex items-center justify-center text-white shadow-sm font-bold text-lg">
             1️⃣
           </div>
           <div>
             <h3 className="text-xl sm:text-2xl font-black text-slate-800 flex items-center gap-2">
               <span>Giải Thích Đơn Giản Dễ Hiểu</span>
-              <BookOpen className="w-5 h-5 text-rose-500" />
+              <BookOpen className="w-5 h-5 text-blue-600" />
             </h3>
             <p className="text-xs sm:text-sm text-slate-500 font-medium">
               Cách hiểu dễ nhất theo phương pháp Cô Thanh Hằng
@@ -208,7 +210,7 @@ export const AIResponseDisplay: React.FC<AIResponseDisplayProps> = ({
 
         {/* Content Box */}
         <div className="space-y-4">
-          <h4 className="text-lg sm:text-xl font-black text-rose-900">
+          <h4 className="text-lg sm:text-xl font-black text-blue-900">
             {data.simpleExplanation.title}
           </h4>
           <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-medium">
@@ -217,10 +219,10 @@ export const AIResponseDisplay: React.FC<AIResponseDisplayProps> = ({
 
           {/* Analogy Box: "Hãy tưởng tượng..." */}
           {data.simpleExplanation.analogy && (
-            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-rose-50 via-pink-50 to-orange-50/40 border-2 border-rose-200 flex items-start gap-3 shadow-2xs">
-              <span className="text-2xl sm:text-3xl shrink-0">🌸</span>
+            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-blue-50 via-sky-50 to-indigo-50/40 border-2 border-blue-200 flex items-start gap-3 shadow-2xs">
+              <span className="text-2xl sm:text-3xl shrink-0">💡</span>
               <div>
-                <h5 className="font-black text-rose-900 text-sm sm:text-base mb-1">
+                <h5 className="font-black text-blue-900 text-sm sm:text-base mb-1">
                   Cô Hằng mách con một hình ảnh ví von thật gần gũi:
                 </h5>
                 <p className="text-slate-700 text-sm sm:text-base font-medium leading-relaxed italic">
@@ -237,16 +239,16 @@ export const AIResponseDisplay: React.FC<AIResponseDisplayProps> = ({
       {/* ======================================================== */}
       <section
         id="section-2-relatable-examples"
-        className="bg-white rounded-3xl p-6 sm:p-8 border-2 border-rose-200 shadow-md"
+        className="bg-white rounded-3xl p-6 sm:p-8 border-2 border-blue-200 shadow-md"
       >
-        <div className="flex items-center gap-3 mb-5 pb-3 border-b border-rose-100">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-pink-500 to-rose-400 flex items-center justify-center text-white shadow-sm font-bold text-lg">
+        <div className="flex items-center gap-3 mb-5 pb-3 border-b border-blue-100">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-sky-500 to-blue-600 flex items-center justify-center text-white shadow-sm font-bold text-lg">
             2️⃣
           </div>
           <div>
             <h3 className="text-xl sm:text-2xl font-black text-slate-800 flex items-center gap-2">
               <span>Ví Dụ Dễ Hiểu Trong Đời Sống</span>
-              <Compass className="w-5 h-5 text-pink-600" />
+              <Compass className="w-5 h-5 text-sky-600" />
             </h3>
             <p className="text-xs sm:text-sm text-slate-500 font-medium">
               Ứng dụng thực tế trong sinh hoạt, gia đình và lớp học
@@ -259,14 +261,14 @@ export const AIResponseDisplay: React.FC<AIResponseDisplayProps> = ({
           {data.relatableExamples.map((example, index) => (
             <div
               key={index}
-              className="p-5 rounded-2xl bg-rose-50/40 hover:bg-rose-50/80 border-2 border-rose-200 shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between"
+              className="p-5 rounded-2xl bg-sky-50/40 hover:bg-sky-50/80 border-2 border-blue-100 shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between"
             >
               <div className="flex items-start gap-3.5 mb-2">
                 <span className="text-3xl sm:text-4xl p-2 rounded-2xl bg-white shadow-2xs shrink-0">
-                  {example.emoji || "🌸"}
+                  {example.emoji || "📘"}
                 </span>
                 <div>
-                  <span className="text-[11px] font-black uppercase text-rose-700 tracking-wider">
+                  <span className="text-[11px] font-black uppercase text-blue-700 tracking-wider">
                     Ví dụ #{index + 1}
                   </span>
                   <h4 className="text-base sm:text-lg font-black text-slate-900">
@@ -320,12 +322,12 @@ export const AIResponseDisplay: React.FC<AIResponseDisplayProps> = ({
       {/* Encouragement Quote Box from Cô Thanh Hằng */}
       {/* ======================================================== */}
       {data.encouragementMessage && (
-        <div className="p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-rose-100 via-pink-100 to-rose-50 border-2 border-rose-300 text-rose-950 flex items-center gap-4 shadow-sm">
-          <div className="text-4xl shrink-0">🌸</div>
+        <div className="p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-blue-50 via-sky-50 to-blue-100/70 border-2 border-blue-200 text-blue-950 flex items-center gap-4 shadow-sm">
+          <div className="text-4xl shrink-0">📘</div>
           <div>
-            <h5 className="font-black text-base sm:text-lg text-rose-950 flex items-center gap-1.5">
+            <h5 className="font-black text-base sm:text-lg text-blue-950 flex items-center gap-1.5">
               <span>Lời dặn dò yêu thương từ Cô Thanh Hằng:</span>
-              <Heart className="w-4 h-4 text-rose-600 fill-rose-500" />
+              <Heart className="w-4 h-4 text-blue-600 fill-blue-500" />
             </h5>
             <p className="text-slate-800 text-sm sm:text-base font-medium mt-1">
               "{data.encouragementMessage}"
@@ -337,15 +339,15 @@ export const AIResponseDisplay: React.FC<AIResponseDisplayProps> = ({
       {/* ======================================================== */}
       {/* Curious Follow-up Q&A Box (Hỏi Thêm Với Cô Thanh Hằng) */}
       {/* ======================================================== */}
-      <section className="bg-white rounded-3xl p-6 sm:p-8 border-2 border-rose-200 shadow-md">
-        <div className="flex items-center gap-3 mb-4 pb-3 border-b border-rose-100">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-pink-500 to-rose-400 flex items-center justify-center text-white shadow-sm font-bold text-lg">
+      <section className="bg-white rounded-3xl p-6 sm:p-8 border-2 border-blue-200 shadow-md">
+        <div className="flex items-center gap-3 mb-4 pb-3 border-b border-blue-100">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-sky-500 to-blue-600 flex items-center justify-center text-white shadow-sm font-bold text-lg">
             💬
           </div>
           <div>
             <h3 className="text-xl sm:text-2xl font-black text-slate-800 flex items-center gap-2">
               <span>Bé Có Muốn Hỏi Thêm Cô Hằng Không?</span>
-              <MessageCircleQuestion className="w-5 h-5 text-rose-600" />
+              <MessageCircleQuestion className="w-5 h-5 text-blue-600" />
             </h3>
             <p className="text-xs sm:text-sm text-slate-500 font-medium">
               Con cứ tự nhiên đặt câu hỏi, Cô Thanh Hằng luôn sẵn sàng giải đáp
@@ -356,8 +358,8 @@ export const AIResponseDisplay: React.FC<AIResponseDisplayProps> = ({
         {/* Suggested Follow-up curiosity chips */}
         {data.followUpSuggestions && data.followUpSuggestions.length > 0 && (
           <div className="mb-4">
-            <span className="text-xs font-bold text-rose-700 block mb-2">
-              🌸 Gợi ý câu hỏi khám phá thêm cùng Cô Hằng:
+            <span className="text-xs font-bold text-blue-800 block mb-2">
+              💡 Gợi ý câu hỏi khám phá thêm cùng Cô Hằng:
             </span>
             <div className="flex flex-wrap gap-2">
               {data.followUpSuggestions.map((sug, idx) => (
@@ -365,10 +367,10 @@ export const AIResponseDisplay: React.FC<AIResponseDisplayProps> = ({
                   key={idx}
                   type="button"
                   onClick={() => handleAskSuggestion(sug)}
-                  className="px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-900 border border-rose-200 text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 cursor-pointer text-left"
+                  className="px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-200 text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 cursor-pointer text-left"
                 >
                   <span>{sug}</span>
-                  <ArrowRight className="w-3 h-3 text-rose-500 shrink-0" />
+                  <ArrowRight className="w-3 h-3 text-blue-500 shrink-0" />
                 </button>
               ))}
             </div>
@@ -383,14 +385,14 @@ export const AIResponseDisplay: React.FC<AIResponseDisplayProps> = ({
             value={customQuestion}
             onChange={(e) => setCustomQuestion(e.target.value)}
             placeholder="Nhắn câu hỏi gửi Cô Hằng... (VD: Cô ơi, có mẹo nào tính nhẩm nhanh không ạ?)"
-            className="flex-1 px-4 py-3 rounded-2xl border-2 border-rose-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none text-sm sm:text-base font-medium text-slate-800"
+            className="flex-1 px-4 py-3 rounded-2xl border-2 border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none text-sm sm:text-base font-medium text-slate-800"
             disabled={isAskingFollowUp}
           />
           <button
             id="ask-follow-up-btn"
             type="submit"
             disabled={isAskingFollowUp || !customQuestion.trim()}
-            className="px-5 py-3 rounded-2xl bg-rose-600 hover:bg-rose-700 disabled:bg-slate-200 text-white font-bold text-sm sm:text-base transition-all flex items-center gap-2 cursor-pointer shadow-md shadow-rose-200"
+            className="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 disabled:bg-slate-200 text-white font-bold text-sm sm:text-base transition-all flex items-center gap-2 cursor-pointer shadow-md shadow-blue-200"
           >
             {isAskingFollowUp ? (
               <span>Cô đang trả lời...</span>
@@ -405,8 +407,8 @@ export const AIResponseDisplay: React.FC<AIResponseDisplayProps> = ({
 
         {/* Follow up answer bubble */}
         {followUpAnswer && (
-          <div className="mt-4 p-4 rounded-2xl bg-rose-50 border-2 border-rose-200 text-rose-950 animate-in fade-in duration-300">
-            <div className="flex items-center gap-2 mb-1.5 font-bold text-sm text-rose-800">
+          <div className="mt-4 p-4 rounded-2xl bg-blue-50 border-2 border-blue-200 text-blue-950 animate-in fade-in duration-300">
+            <div className="flex items-center gap-2 mb-1.5 font-bold text-sm text-blue-800">
               <span>👩‍🏫 Cô Thanh Hằng giải đáp:</span>
             </div>
             <p className="text-sm sm:text-base font-medium leading-relaxed">

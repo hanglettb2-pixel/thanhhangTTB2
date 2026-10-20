@@ -156,7 +156,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-rose-50/50 via-white to-pink-50/40 font-sans text-slate-800 flex flex-col selection:bg-rose-200">
+    <div className="min-h-screen bg-gradient-to-b from-sky-50/60 via-white to-blue-50/40 font-sans text-slate-800 flex flex-col selection:bg-blue-200">
       {/* Top Navigation */}
       <Navbar
         totalStars={totalStars}
@@ -182,18 +182,18 @@ export default function App() {
 
         {/* Loading Mascot Animation */}
         {isLoading && (
-          <div className="max-w-md mx-auto my-8 p-8 rounded-3xl bg-white border-2 border-rose-300 shadow-xl text-center space-y-4 animate-pulse">
-            <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-tr from-rose-400 via-pink-400 to-rose-300 flex items-center justify-center text-4xl shadow-md animate-bounce border-2 border-white">
+          <div className="max-w-md mx-auto my-8 p-8 rounded-3xl bg-white border-2 border-blue-200 shadow-xl text-center space-y-4 animate-pulse">
+            <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-tr from-blue-600 via-sky-500 to-blue-400 flex items-center justify-center text-4xl shadow-md animate-bounce border-2 border-white">
               👩‍🏫
             </div>
             <h3 className="text-xl font-black text-slate-800">
               Cô Thanh Hằng đang soạn bài giảng cho con...
             </h3>
             <p className="text-sm text-slate-500 font-medium">
-              Đang chuẩn bị lời giải thích gần gũi, ví dụ sinh động và 3 câu đố kiểm tra kiến thức! 🌸
+              Đang chuẩn bị lời giải thích gần gũi, ví dụ sinh động và 3 câu đố kiểm tra kiến thức! 📘
             </p>
-            <div className="w-48 h-2 bg-rose-100 rounded-full mx-auto overflow-hidden">
-              <div className="h-full bg-rose-500 rounded-full animate-pulse" />
+            <div className="w-48 h-2 bg-blue-100 rounded-full mx-auto overflow-hidden">
+              <div className="h-full bg-blue-600 rounded-full animate-pulse" />
             </div>
           </div>
         )}
@@ -201,7 +201,7 @@ export default function App() {
         {/* Error Notification */}
         {error && (
           <div className="max-w-2xl mx-auto px-4">
-            <div className="p-4 rounded-2xl bg-rose-50 border-2 border-rose-200 text-rose-800 flex items-center justify-between gap-3 shadow-xs">
+            <div className="p-4 rounded-2xl bg-blue-50 border-2 border-blue-200 text-blue-900 flex items-center justify-between gap-3 shadow-xs">
               <div className="flex items-center gap-2">
                 <span className="text-xl">⚠️</span>
                 <p className="text-sm font-semibold">{error}</p>
@@ -209,7 +209,7 @@ export default function App() {
               <button
                 type="button"
                 onClick={() => handleSearch()}
-                className="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-all"
+                className="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-xs"
               >
                 Thử lại
               </button>
@@ -217,7 +217,7 @@ export default function App() {
           </div>
         )}
 
-        {/* AI Response Display (4 Structured Sections) */}
+        {/* AI Response Display (Structured Sections) */}
         {!isLoading && studyData && (
           <AIResponseDisplay
             data={studyData}
@@ -240,15 +240,15 @@ export default function App() {
                   setTopic("Bảng nhân 7");
                   handleSearch("Bảng nhân 7");
                 }}
-                className="p-6 rounded-3xl bg-gradient-to-br from-rose-50 to-pink-100/70 border-2 border-rose-200 shadow-sm hover:shadow-md transition-all cursor-pointer group"
+                className="p-6 rounded-3xl bg-gradient-to-br from-blue-50 to-sky-100/70 border-2 border-blue-200 hover:border-blue-300 shadow-sm hover:shadow-md transition-all cursor-pointer group"
               >
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-3xl p-3 bg-white rounded-2xl shadow-xs">🔢</span>
-                  <span className="text-xs font-black px-3 py-1 rounded-full bg-rose-500 text-white shadow-xs">
+                  <span className="text-xs font-black px-3 py-1 rounded-full bg-blue-600 text-white shadow-xs">
                     Môn Toán
                   </span>
                 </div>
-                <h4 className="text-lg font-black text-slate-900 group-hover:text-rose-600 transition-all mb-1">
+                <h4 className="text-lg font-black text-slate-900 group-hover:text-blue-700 transition-all mb-1">
                   Khám phá môn Toán cùng Cô Hằng
                 </h4>
                 <p className="text-xs text-slate-600 font-medium leading-relaxed">
@@ -263,15 +263,15 @@ export default function App() {
                   setTopic("Biện pháp so sánh ví von");
                   handleSearch("Biện pháp so sánh ví von");
                 }}
-                className="p-6 rounded-3xl bg-gradient-to-br from-pink-50 to-rose-100/70 border-2 border-pink-200 shadow-sm hover:shadow-md transition-all cursor-pointer group"
+                className="p-6 rounded-3xl bg-gradient-to-br from-sky-50 to-indigo-50/70 border-2 border-sky-200 hover:border-sky-300 shadow-sm hover:shadow-md transition-all cursor-pointer group"
               >
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-3xl p-3 bg-white rounded-2xl shadow-xs">📖</span>
-                  <span className="text-xs font-black px-3 py-1 rounded-full bg-pink-600 text-white shadow-xs">
+                  <span className="text-xs font-black px-3 py-1 rounded-full bg-sky-600 text-white shadow-xs">
                     Môn Tiếng Việt
                   </span>
                 </div>
-                <h4 className="text-lg font-black text-slate-900 group-hover:text-pink-600 transition-all mb-1">
+                <h4 className="text-lg font-black text-slate-900 group-hover:text-sky-700 transition-all mb-1">
                   Khám phá Tiếng Việt cùng Cô Hằng
                 </h4>
                 <p className="text-xs text-slate-600 font-medium leading-relaxed">
@@ -287,8 +287,8 @@ export default function App() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="p-5 rounded-2xl bg-white border-2 border-rose-200 shadow-xs hover:shadow-md transition-all">
-                <div className="w-10 h-10 rounded-xl bg-rose-100 text-rose-800 flex items-center justify-center font-black text-base mb-3">
+              <div className="p-5 rounded-2xl bg-white border-2 border-blue-100 hover:border-blue-200 shadow-xs hover:shadow-md transition-all">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center font-black text-base mb-3">
                   1️⃣
                 </div>
                 <h4 className="font-black text-slate-900 text-base mb-1">
@@ -299,8 +299,8 @@ export default function App() {
                 </p>
               </div>
 
-              <div className="p-5 rounded-2xl bg-white border-2 border-pink-200 shadow-xs hover:shadow-md transition-all">
-                <div className="w-10 h-10 rounded-xl bg-pink-100 text-pink-800 flex items-center justify-center font-black text-base mb-3">
+              <div className="p-5 rounded-2xl bg-white border-2 border-sky-100 hover:border-sky-200 shadow-xs hover:shadow-md transition-all">
+                <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-700 flex items-center justify-center font-black text-base mb-3">
                   2️⃣
                 </div>
                 <h4 className="font-black text-slate-900 text-base mb-1">
@@ -311,20 +311,20 @@ export default function App() {
                 </p>
               </div>
 
-              <div className="p-5 rounded-2xl bg-white border-2 border-rose-200 shadow-xs hover:shadow-md transition-all">
-                <div className="w-10 h-10 rounded-xl bg-rose-100 text-rose-800 flex items-center justify-center font-black text-base mb-3">
+              <div className="p-5 rounded-2xl bg-white border-2 border-blue-100 hover:border-blue-200 shadow-xs hover:shadow-md transition-all">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center font-black text-base mb-3">
                   3️⃣
                 </div>
                 <h4 className="font-black text-slate-900 text-base mb-1">
                   3 ý cần nhớ
                 </h4>
                 <p className="text-xs text-slate-500 font-medium leading-relaxed">
-                  3 bí kíp cô đọng kèm bộ Flashcard lật 2 mặt giúp con ghi nhớ tức thì.
+                  3 bí kíp cô đọng kèm bộ 5 Flashcard lật 2 mặt giúp con ghi nhớ tức thì.
                 </p>
               </div>
 
-              <div className="p-5 rounded-2xl bg-white border-2 border-pink-200 shadow-xs hover:shadow-md transition-all">
-                <div className="w-10 h-10 rounded-xl bg-pink-100 text-pink-800 flex items-center justify-center font-black text-base mb-3">
+              <div className="p-5 rounded-2xl bg-white border-2 border-sky-100 hover:border-sky-200 shadow-xs hover:shadow-md transition-all">
+                <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-700 flex items-center justify-center font-black text-base mb-3">
                   4️⃣
                 </div>
                 <h4 className="font-black text-slate-900 text-base mb-1">
@@ -339,16 +339,23 @@ export default function App() {
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="mt-auto border-t border-rose-100 bg-white/80 py-6 text-center text-xs text-slate-500 font-medium">
-        <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <span className="font-black text-rose-700">🌸 TRỢ LÝ CÔ THANH HẰNG</span>
-            <span className="text-rose-300">•</span>
-            <span>Trợ lý học tập môn Toán & Tiếng Việt dành cho học sinh tiểu học (6–10 tuổi)</span>
+      {/* Footer with Copyright */}
+      <footer className="mt-auto border-t border-blue-100 bg-white/95 py-6 text-center text-xs text-slate-600 font-medium">
+        <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 text-center sm:text-left">
+            <span className="font-black text-blue-800 flex items-center gap-1.5">
+              <span>📘</span>
+              <span>TRỢ LÝ CÔ THANH HẰNG</span>
+            </span>
+            <span className="hidden sm:inline text-blue-200">•</span>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-800 font-bold text-xs">
+              <span>© Bản quyền:</span>
+              <span className="font-extrabold text-blue-900">Cô Lê Thị Thanh Hằng - Trường Tiểu học Tân Thành Bình</span>
+            </div>
           </div>
-          <p className="text-slate-400">
-            Khơi dậy niềm yêu thích học tập & rèn luyện tư duy tự lập cho con
+          <p className="text-slate-500 text-xs flex items-center gap-1.5">
+            <span>Đồng hành cùng học sinh tiểu học (6–10 tuổi) môn Toán & Tiếng Việt</span>
+            <span className="text-blue-500">✨</span>
           </p>
         </div>
       </footer>

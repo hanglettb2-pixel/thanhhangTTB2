@@ -1,6 +1,6 @@
 {
   "name": "Trợ lí Cô Thanh Hằng",
-  "description": "Trợ lý học tập thông minh môn Toán và Tiếng Việt cho học sinh tiểu học 6-10 tuổi của Cô giáo Thanh Hằng.",
+  "description": "Trợ lý học tập thông minh môn Toán và Tiếng Việt cho học sinh tiểu học (6–10 tuổi). Bản quyền: Cô Lê Thị Thanh Hằng - Trường Tiểu học Tân Thành Bình.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
