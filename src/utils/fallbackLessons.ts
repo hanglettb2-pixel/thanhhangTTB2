@@ -1,13 +1,23 @@
 import { StudyBuddyResponse } from "../types";
+import { findStandardizedLesson } from "../data/standardizedLessons";
 
 export function generateClientFallbackLesson(
   topic: string,
   subject?: "all" | "toan" | "tieng-viet",
   ageGroup?: string
 ): StudyBuddyResponse {
-  const cleanTopic = topic.trim() || (subject === "tieng-viet" ? "Biện pháp so sánh" : "Bảng nhân 5");
-  const lower = cleanTopic.toLowerCase();
+  const cleanTopic = topic.trim() || (subject === "tieng-viet" ? "Biện pháp so sánh" : "Bảng nhân 2");
 
+  // 1. Check standardized curriculum database first
+  const standardized = findStandardizedLesson(cleanTopic, subject);
+  if (standardized) {
+    return {
+      ...standardized,
+      topic: cleanTopic.length < 30 ? cleanTopic : standardized.topic,
+    };
+  }
+
+  const lower = cleanTopic.toLowerCase();
   const isMath =
     subject === "toan" ||
     lower.includes("toán") ||
@@ -17,91 +27,88 @@ export function generateClientFallbackLesson(
     lower.includes("trừ") ||
     lower.includes("hình") ||
     lower.includes("số") ||
-    lower.includes("chu vi") ||
-    lower.includes("diện tích") ||
-    lower.includes("phân số") ||
-    lower.includes("que tính") ||
-    lower.includes("đo lường") ||
+    lower.includes("đo") ||
     lower.includes("kg") ||
     lower.includes("lít") ||
     lower.includes("mét") ||
-    lower.includes("cm");
+    lower.includes("cm") ||
+    /\d+/.test(cleanTopic);
 
   if (isMath) {
     return {
       topic: cleanTopic,
       topicEmoji: "🔢",
-      summaryBadge: "Môn Toán Cô Thanh Hằng",
+      summaryBadge: "Môn Toán Lớp 2 • Cô Thanh Hằng",
       simpleExplanation: {
-        title: `Bí quyết học giỏi ${cleanTopic} cùng Cô Thanh Hằng`,
-        content: `Chào con yêu! Trong môn Toán của Cô Thanh Hằng, ${cleanTopic} là một kiến thức rất thú vị và bổ ích. Toán học không hề khô khan mà giống như trò chơi ghép hình thông minh: khi con hiểu rõ quy luật của các con số và hình khối, con sẽ tìm ra đáp án nhanh như chớp!`,
-        analogy: `Hãy tưởng tượng các con số giống như những bậc thang kỳ diệu, con bước từng bước vững chắc thì bậc thang nào con cũng vượt qua dễ dàng!`
+        title: `Cùng Cô Thanh Hằng giải bài toán: ${cleanTopic}`,
+        content: `Chào con yêu! Trong môn Toán lớp 2, kiến thức về "${cleanTopic}" rất quan trọng và gần gũi với cuộc sống. Khi con hiểu rõ bản chất của các con số và thực hiện phép tính cẩn thận từng bước, mọi bài toán đều trở nên dễ dàng!`,
+        analogy: `Hãy tưởng tượng các con số giống như những bậc thang vững chắc, con bước từng bước từ hàng đơn vị đến hàng chục thì bậc thang nào con cũng bước qua tự tin!`
       },
       relatableExamples: [
         {
-          title: "Ví dụ chia kẹo ngọt cùng bạn thân",
-          description: "Nếu con có 10 chiếc kẹo và chia đều cho 2 bạn, mỗi bạn sẽ nhận được đúng 5 chiếc kẹo thơm ngon (10 : 2 = 5).",
-          emoji: "🍬"
+          title: "Ví dụ chia quà cùng các bạn",
+          description: "Mẹ mua cho con một túi gồm 12 chiếc bánh, con chia đều cho 2 bạn nhỏ. Mỗi bạn nhận được: 12 : 2 = 6 chiếc bánh ngọt ngào.",
+          emoji: "🧁"
         },
         {
-          title: "Ví dụ đếm đồ chơi trong phòng học",
-          description: "Mỗi ngăn kệ có 3 quyển truyện tranh, nếu con có 4 ngăn thì tổng cộng con có 12 quyển truyện hay (3 x 4 = 12).",
-          emoji: "📚"
+          title: "Ví dụ góp hoa điểm 10",
+          description: "Tuần này con đạt được 15 bông hoa điểm 10, tuần sau con đạt thêm 12 bông hoa nữa. Cả hai tuần con có tất cả: 15 + 12 = 27 bông hoa rực rỡ.",
+          emoji: "🌸"
         }
       ],
       keyPoints: [
         {
           number: 1,
-          title: "Đọc thật kỹ đề bài",
-          takeaway: "Gạch chân dưới dữ kiện bài toán cho biết gì và câu hỏi bài toán yêu cầu tìm gì.",
+          title: "Đọc kỹ dữ kiện đề bài",
+          takeaway: "Xác định rõ đề bài cho biết gì, hỏi gì và đại lượng cần tìm là gì.",
           iconHint: "🔍"
         },
         {
           number: 2,
-          title: "Hiểu bản chất phép tính",
-          takeaway: "Nắm chắc quy tắc thực hiện phép tính, đặt tính thẳng cột từ hàng đơn vị đến hàng chục.",
-          iconHint: "💡"
+          title: "Đặt tính và tính cẩn thận",
+          takeaway: "Thực hiện phép tính từ phải sang trái (từ hàng đơn vị sang hàng chục).",
+          iconHint: "📐"
         },
         {
           number: 3,
-          title: "Luôn kiểm tra lại kết quả",
-          takeaway: "Tính nhẩm ngược lại một lần nữa để chắc chắn nhận trọn điểm 10 rực rỡ của Cô nhé!",
+          title: "Kiểm tra lại kết quả",
+          takeaway: "Thử lại phép tính ngược lại (thử phép trừ bằng phép cộng, thử phép chia bằng phép nhân) để đảm bảo đúng 100%.",
           iconHint: "⭐"
         }
       ],
       flashcards: [
         {
           id: 1,
-          front: `Bản chất của ${cleanTopic} là gì?`,
-          back: `Là quy luật toán học giúp con tính toán nhanh, tư duy logic và giải quyết các bài toán một cách chính xác.`,
-          category: "Thuật ngữ Toán",
+          front: `Quy tắc trọng tâm của "${cleanTopic}" là gì?`,
+          back: `Nắm chắc các công thức thành phần phép tính và quy tắc tính từ hàng đơn vị sang hàng chục.`,
+          category: "Công thức toán học",
           emoji: "🔢"
         },
         {
           id: 2,
-          front: "Khi gặp bài toán có lời văn, bước 1 con làm gì?",
-          back: "Đọc thật kỹ đề bài ít nhất 2 lần và xác định rõ: Bài toán cho biết gì? Bài toán hỏi gì?",
-          category: "Phương pháp giải",
-          emoji: "🔍"
-        },
-        {
-          id: 3,
-          front: "Mẹo kiểm tra lại kết quả phép tính như thế nào?",
-          back: "Thực hiện phép tính ngược lại (kiểm tra phép trừ bằng phép cộng, kiểm tra phép chia bằng phép nhân).",
-          category: "Bí kíp tính nhanh",
+          front: "Khi thực hiện phép tính có nhớ, bước quan trọng nhất là gì?",
+          back: "Nhớ cộng thêm 1 (hoặc bớt 1) vào hàng chục tiếp theo để kết quả không bị thiếu hụt.",
+          category: "Mẹo làm bài",
           emoji: "💡"
         },
         {
+          id: 3,
+          front: "Bài toán yêu cầu tìm 'tất cả' thì con làm phép tính gì?",
+          back: "Thông thường con làm phép tính CỘNG (gộp tất cả các số hạng lại với nhau).",
+          category: "Phương pháp giải toán",
+          emoji: "➕"
+        },
+        {
           id: 4,
-          front: "Làm sao để không bị nhầm lẫn khi đặt tính rồi tính?",
-          back: "Viết các chữ số thẳng hàng thẳng cột: hàng đơn vị thẳng hàng đơn vị, hàng chục thẳng hàng chục.",
-          category: "Quy tắc trình bày",
-          emoji: "📐"
+          front: "Bài toán yêu cầu tìm phần 'còn lại' thì con làm phép tính gì?",
+          back: "Con làm phép tính TRỪ (lấy số ban đầu trừ đi số đã bớt hoặc đã bán).",
+          category: "Phương pháp giải toán",
+          emoji: "➖"
         },
         {
           id: 5,
-          front: "Bí quyết học giỏi Toán của Cô Thanh Hằng là gì?",
-          back: "Hiểu bản chất số học, chăm chỉ luyện tập 15 phút mỗi ngày và tự tin phát biểu xây dựng bài!",
+          front: "Bí quyết đạt điểm 10 môn Toán của Cô Thanh Hằng là gì?",
+          back: "Hiểu bản chất, viết số nắn nót thẳng hàng thẳng cột và luôn kiểm tra lại bài trước khi nộp!",
           category: "Lời khuyên từ Cô",
           emoji: "🌸"
         }
@@ -109,70 +116,55 @@ export function generateClientFallbackLesson(
       quizQuestions: [
         {
           id: 1,
-          question: `Khi làm bài tập về ${cleanTopic}, bước đầu tiên con cần làm là gì?`,
-          options: [
-            "Đọc kỹ đề bài và xem bài toán cho gì, hỏi gì",
-            "Viết ngay đáp án mà không cần suy nghĩ",
-            "Bỏ qua bài toán khó",
-            "Chỉ đoán mò kết quả"
-          ],
+          question: `Cho phép tính cộng: 45 + 32 = 77. Trong phép tính này, số 77 được gọi là gì?`,
+          options: ["Tổng", "Số hạng", "Hiệu", "Thương"],
           correctIndex: 0,
-          hint: "Đọc kỹ đề bài là chiếc chìa khóa vàng giúp con không bao giờ làm nhầm.",
-          explanation: "Cô khen con rất giỏi! Đọc kỹ đề bài giúp con hiểu đúng và tìm ra cách giải nhanh nhất!",
-          funFact: "Các nhà toán học nổi tiếng thế giới luôn dành phần lớn thời gian để phân tích đề bài thật cẩn thận đấy!"
+          hint: "Kết quả của một phép tính cộng luôn được gọi là gì nhỉ?",
+          explanation: "Chính xác! Trong phép tính cộng, kết quả nhận được (77) được gọi là TỔNG.",
+          funFact: "Các con số trong toán học luôn tuân theo những trật tự logic vô cùng kỳ diệu!"
         },
         {
           id: 2,
-          question: "Nếu con gặp một bài toán khó chưa nghĩ ra ngay, con nên làm như thế nào?",
-          options: [
-            "Bỏ cuộc không làm nữa",
-            "Tách bài toán thành các bước nhỏ và vẽ sơ đồ minh họa",
-            "Nhờ người khác làm hộ từ đầu đến cuối",
-            "Khoanh bừa một đáp án"
-          ],
+          question: `Có 18 quyển vở chia đều cho 2 tổ học sinh. Hỏi mỗi tổ nhận được bao nhiêu quyển vở?`,
+          options: ["8 quyển", "9 quyển", "10 quyển", "16 quyển"],
           correctIndex: 1,
-          hint: "Hình vẽ hoặc sơ đồ đoạn thẳng sẽ giúp đáp án hiện ra ngay trước mắt con.",
-          explanation: "Hoan hô bạn nhỏ! Tách nhỏ bài toán và vẽ sơ đồ là phương pháp học đỉnh cao của học sinh giỏi Toán Cô Thanh Hằng!",
-          funFact: "Hình vẽ minh họa giúp não bộ của con tư duy nhanh gấp 3 lần so với chỉ nhìn chữ viết!"
+          hint: "Chia đều 18 quyển vở cho 2 tổ: 18 : 2 = ?",
+          explanation: "Rất giỏi! Ta làm phép chia: 18 : 2 = 9 (quyển vở). Mỗi tổ nhận được 9 quyển vở.",
+          funFact: "Số 9 là số có một chữ số lớn nhất trong hệ đếm thập phân của chúng ta!"
         },
         {
           id: 3,
-          question: "Để tính toán nhanh và tự tin đạt điểm 10 môn Toán, bí quyết của con là gì?",
-          options: [
-            "Học thuộc bảng tính và rèn luyện 15 phút mỗi ngày",
-            "Chỉ học trước ngày thi một buổi",
-            "Không cần làm bài tập về nhà",
-            "Chỉ tính nhẩm đại khái"
-          ],
+          question: `Một cửa hàng có 65 kg gạo, buổi sáng đã bán được 28 kg gạo. Hỏi cửa hàng còn lại bao nhiêu ki-lô-gam gạo?`,
+          options: ["37 kg", "47 kg", "35 kg", "43 kg"],
           correctIndex: 0,
-          hint: "Chăm chỉ đều đặn mỗi ngày sẽ biến con thành kiện tướng toán học.",
-          explanation: "Tuyệt vời luôn con yêu! Chăm chỉ mỗi ngày sẽ giúp con luôn tự tin đứng đầu lớp môn Toán!",
-          funFact: "Bộ não sẽ phát triển thêm hàng triệu kết nối thông minh mỗi khi con giải quyết thành công một câu đố toán học!"
+          hint: "Số gạo còn lại = 65 kg - 28 kg.",
+          explanation: "Cô khen con xuất sắc! Ta lấy 65 - 28 = 37 (kg). Vậy cửa hàng còn lại đúng 37 kg gạo.",
+          funFact: "Phép trừ có nhớ được thực hiện bằng cách mượn 1 chục ở hàng chục đấy con yêu!"
         }
       ],
-      encouragementMessage: "Cô Lê Thị Thanh Hằng gửi tặng con một bông hoa điểm 10 tươi thắm! Con rất thông minh và chăm chỉ, tiếp tục phát huy nhé!",
+      encouragementMessage: "Cô Lê Thị Thanh Hằng khen ngợi sự tập trung và chăm chỉ của con! Tặng con 1 bông hoa điểm 10 rực rỡ!",
       followUpSuggestions: [
-        `Cô Hằng ơi, có mẹo nào tính nhanh ${cleanTopic} không ạ?`,
-        `Cô Hằng cho con thêm một câu đố vui về ${cleanTopic} được không ạ?`,
-        `Ứng dụng của ${cleanTopic} trong đời sống hàng ngày là gì ạ?`
+        `Cô Hằng ơi, có mẹo nào tính nhẩm nhanh chủ đề ${cleanTopic} không ạ?`,
+        "Cho con thêm một câu đố vui toán học nữa đi cô!",
+        "Ứng dụng của bài học này khi đi siêu thị là gì ạ?"
       ]
     };
   }
 
-  // Tiếng Việt default fallback
+  // Tiếng Việt fallback
   return {
     topic: cleanTopic,
     topicEmoji: "📖",
-    summaryBadge: "Môn Tiếng Việt Cô Thanh Hằng",
+    summaryBadge: "Môn Tiếng Việt Lớp 2 • Cô Thanh Hằng",
     simpleExplanation: {
-      title: `Cùng Cô Thanh Hằng khám phá ${cleanTopic}`,
-      content: `Chào con yêu! Tiếng Việt của chúng mình giàu đẹp, trong sáng và chan chứa yêu thương. Khi tìm hiểu về ${cleanTopic}, con sẽ biết cách dùng từ ngữ thật hay, viết câu văn mượt mà và diễn đạt cảm xúc chân thật nhất.`,
-      analogy: `Hãy tưởng tượng những con chữ giống như những nốt nhạc vui nhộn, khi con sắp xếp đúng điệu, con sẽ tạo nên một bài ca tuyệt hay!`
+      title: `Cùng Cô Thanh Hằng khám phá bài học: ${cleanTopic}`,
+      content: `Chào con yêu! Tiếng Việt của chúng mình trong sáng, giàu đẹp và chan chứa yêu thương. Khi học bài "${cleanTopic}", con sẽ biết cách dùng từ ngữ chuẩn xác, viết câu văn mượt mà và tự tin biểu đạt suy nghĩ của mình!`,
+      analogy: `Mỗi từ ngữ giống như một bông hoa xinh đẹp, khi con xếp các bông hoa khéo léo bên nhau, con sẽ tạo nên một vườn hoa câu văn tỏa ngát hương thơm!`
     },
     relatableExamples: [
       {
-        title: "Ví dụ trong câu văn miêu tả sinh động",
-        description: "Khi tả đôi mắt mẹ: 'Mắt mẹ sáng lung linh như những vì sao đêm', câu văn lập tức trở nên ấm áp và tràn đầy tình cảm.",
+        title: "Ví dụ trong câu văn miêu tả",
+        description: "Khi tả đôi mắt mẹ: 'Đôi mắt mẹ sáng lung linh như những vì sao đêm', câu văn lập tức trở nên ấm áp và chan chứa tình yêu thương.",
         emoji: "✨"
       },
       {
@@ -191,49 +183,49 @@ export function generateClientFallbackLesson(
       {
         number: 2,
         title: "Viết đúng chính tả và dấu câu",
-        takeaway: "Chữ đầu câu nhớ viết hoa, cuối câu đặt dấu chấm hoặc dấu câu thích hợp.",
+        takeaway: "Chữ đầu câu nhớ viết hoa, cuối câu đặt dấu chấm, dấu chấm hỏi hoặc dấu chấm than thích hợp.",
         iconHint: "✍️"
       },
       {
         number: 3,
         title: "Gửi gắm cảm xúc vào bài viết",
-        takeaway: "Sử dụng từ ngữ gợi cảm và hình ảnh so sánh, nhân hóa để bài văn thêm cuốn hút.",
+        takeaway: "Sử dụng từ ngữ gợi cảm xúc và hình ảnh so sánh ví von để bài văn thêm cuốn hút.",
         iconHint: "💖"
       }
     ],
     flashcards: [
       {
         id: 1,
-        front: `Thế nào là ${cleanTopic}?`,
-        back: `Là kiến thức Tiếng Việt quan trọng giúp con diễn đạt ý nghĩ mạch lạc, lời văn trong sáng và giàu cảm xúc.`,
-        category: "Khái niệm Tiếng Việt",
+        front: `Trọng tâm kiến thức của bài "${cleanTopic}" là gì?`,
+        back: `Hiểu rõ khái niệm ngữ pháp, nhận diện từ loại và vận dụng đặt câu văn đúng chính tả, giàu cảm xúc.`,
+        category: "Kiến thức trọng tâm",
         emoji: "📖"
       },
       {
         id: 2,
-        front: "Mẹo để đoạn văn hay và lôi cuốn người đọc là gì?",
-        back: "Sử dụng các từ ngữ gợi tả âm thanh, màu sắc và biện pháp so sánh, nhân hóa gần gũi.",
+        front: "Đầu câu văn cần chú ý quy tắc chính tả gì?",
+        back: "Bắt buộc phải VIẾT HOA chữ cái đầu câu.",
+        category: "Quy tắc chính tả",
+        emoji: "✍️"
+      },
+      {
+        id: 3,
+        front: "Mẹo để bài tập làm văn được cô giáo khen điểm 10 là gì?",
+        back: "Dùng các từ ngữ chỉ màu sắc, âm thanh, hình ảnh so sánh sinh động và viết chữ nắn nót sạch đẹp.",
         category: "Bí kíp làm văn",
         emoji: "✨"
       },
       {
-        id: 3,
-        front: "Quy tắc vàng về dấu câu trong Tiếng Việt là gì?",
-        back: "Đầu câu bắt buộc viết hoa, kết thúc câu trọn ý phải có dấu chấm hoặc dấu câu phù hợp.",
-        category: "Quy tắc ngữ pháp",
-        emoji: "✍️"
-      },
-      {
         id: 4,
-        front: "Làm sao để không bao giờ bị viết sai chính tả?",
-        back: "Hiểu rõ nghĩa của từ, phát âm chuẩn xác và tích cực đọc sách thiếu nhi mỗi ngày.",
-        category: "Bí kíp chính tả",
-        emoji: "📚"
+        front: "Cuối câu bộc lộ cảm xúc vui mừng, ngạc nhiên thì đặt dấu câu nào?",
+        back: "Đặt DẤU CHẤM THAN (!).",
+        category: "Dấu câu",
+        emoji: "❗"
       },
       {
         id: 5,
-        front: "Lời nhắn nhủ của Cô Thanh Hằng khi học Tiếng Việt?",
-        back: "Yêu quý tiếng mẹ đẻ, tự tin viết nên những trang văn giàu cảm xúc và gửi gắm yêu thương vào từng câu chữ!",
+        front: "Lời khuyên luyện đọc của Cô Thanh Hằng là gì?",
+        back: "Đọc to, rõ ràng, ngắt nghỉ đúng dấu phẩy, dấu chấm và đọc sách truyện thiếu nhi 15 phút mỗi ngày!",
         category: "Lời khuyên từ Cô",
         emoji: "🌸"
       }
@@ -241,52 +233,42 @@ export function generateClientFallbackLesson(
     quizQuestions: [
       {
         id: 1,
-        question: `Khi viết một câu văn Tiếng Việt hoàn chỉnh, con cần ghi nhớ điều gì nhất?`,
-        options: [
-          "Đầu câu viết hoa và cuối câu có dấu câu thích hợp",
-          "Viết tùy thích không cần dấu câu",
-          "Chỉ cần viết một từ duy nhất",
-          "Không cần chú ý lỗi chính tả"
-        ],
+        question: `Trong câu văn: 'Mặt trời đỏ rực như một quả cầu lửa khổng lồ', biện pháp nghệ thuật nào đã được sử dụng?`,
+        options: ["Biện pháp so sánh", "Biện pháp nhân hóa", "Biện pháp lặp từ", "Không dùng biện pháp nào"],
         correctIndex: 0,
-        hint: "Dấu chấm câu giúp người đọc hiểu trọn vẹn câu văn của con.",
-        explanation: "Chính xác luôn con yêu! Cô Thanh Hằng rất khen con đã ghi nhớ quy tắc vàng về dấu câu!",
-        funFact: "Dấu câu giống như những biển chỉ dẫn giao thông giúp bài văn trôi chảy và rõ ràng đấy!"
+        hint: "Có từ 'như' nối giữa mặt trời và quả cầu lửa.",
+        explanation: "Chính xác! Câu văn sử dụng biện pháp so sánh (Mặt trời đỏ rực như quả cầu lửa) giúp hình ảnh hiện lên rực rỡ.",
+        funFact: "Biện pháp so sánh là chiếc đũa thần giúp bài văn của học sinh lớp 2 luôn được cô giáo khen ngợi!"
       },
       {
         id: 2,
-        question: "Làm thế nào để bài tập làm văn của con trở nên sinh động và giàu cảm xúc hơn?",
-        options: [
-          "Sử dụng hình ảnh so sánh và từ gợi tả màu sắc, âm thanh",
-          "Chép nguyên văn bài của bạn khác",
-          "Viết thật ngắn cho nhanh xong",
-          "Không dùng bất kỳ từ chỉ cảm xúc nào"
-        ],
+        question: `Từ nào sau đây viết ĐÚNG CHÍNH TẢ tiếng Việt?`,
+        options: ["Kính yêu", "Con ghà", "Bàn ghỗ", "Lắng nge"],
         correctIndex: 0,
-        hint: "Những hình ảnh so sánh ví von sẽ làm bài văn bừng sáng.",
-        explanation: "Giỏi lắm bạn nhỏ của cô! Những hình ảnh so sánh ví von gần gũi sẽ mang về điểm 10 rực rỡ cho con!",
-        funFact: "Những nhà văn vĩ đại nhất đều là những người rất thích quan sát thiên nhiên và cuộc sống xung quanh!"
+        hint: "Nhớ quy tắc: K đi với i, e, ê. Còn g đơn và ng đơn đi với a, o, ô, u...",
+        explanation: "Rất chuẩn! 'Kính yêu' viết đúng quy tắc (chữ k đi với âm i). Các từ kia viết sai: phải là con gà, bàn gỗ, lắng nghe.",
+        funFact: "Tiếng Việt có dấu thanh du dương như một bản nhạc khiến bạn bè quốc tế rất ngưỡng mộ!"
       },
       {
         id: 3,
-        question: "Bí quyết để con mở rộng vốn từ và không bao giờ viết sai chính tả là gì?",
+        question: `Câu nào sau đây được viết theo mẫu câu 'Ai là gì?' dùng để giới thiệu?`,
         options: [
-          "Chăm chỉ đọc sách truyện thiếu nhi và viết nắn nót mỗi ngày",
-          "Không cần đọc sách",
-          "Viết thật nhanh ẩu",
-          "Không bao giờ kiểm tra lại bài viết"
+          "Cô Lê Thị Thanh Hằng là cô giáo dạy giỏi của trường em",
+          "Cô giáo đang giảng bài say sưa",
+          "Cô giáo rất dịu dàng và hiền hậu",
+          "Học sinh kính cẩn chào cô giáo"
         ],
         correctIndex: 0,
-        hint: "Mỗi trang sách hay là một người thầy dạy chính tả và vốn từ tuyệt vời.",
-        explanation: "Tuyệt vời luôn con! Đọc sách mỗi ngày cùng Cô Hằng sẽ giúp con trở thành cây bút nhí xuất sắc!",
-        funFact: "Đọc 10 trang sách thiếu nhi mỗi ngày giúp con tích lũy thêm hơn 1.000 từ ngữ mới mỗi năm!"
+        hint: "Câu có chữ 'là' dùng để giới thiệu chức vụ, nghề nghiệp của cô giáo.",
+        explanation: "Cô khen con xuất sắc! 'Cô Lê Thị Thanh Hằng là cô giáo dạy giỏi của trường em' thuộc mẫu câu 'Ai là gì?'.",
+        funFact: "Mẫu câu 'Ai là gì?' là chiếc cầu nối thân thiện giúp các bạn nhỏ làm quen và giới thiệu bản thân!"
       }
     ],
-    encouragementMessage: "Cô Lê Thị Thanh Hằng gửi tặng con một bông hoa điểm 10 rực rỡ! Con rất chăm chỉ và yêu thích Tiếng Việt!",
+    encouragementMessage: "Cô Lê Thị Thanh Hằng gửi tặng con một bông hoa điểm 10 tươi thắm! Con học Tiếng Việt rất thông minh và chăm chỉ!",
     followUpSuggestions: [
-      `Cô Hằng ơi, viết đoạn văn ngắn về ${cleanTopic} như thế nào ạ?`,
-      `Có câu đố vui chữ nào về ${cleanTopic} không cô Hằng?`,
-      `Mẹo phân biệt các từ dễ lẫn trong Tiếng Việt là gì ạ?`
+      `Cô Hằng ơi, viết đoạn văn ngắn về "${cleanTopic}" như thế nào ạ?`,
+      "Có câu đố chữ vui nào về bài này không cô?",
+      "Cách phân biệt từ chỉ hoạt động và từ chỉ đặc điểm dễ nhớ nhất là gì ạ?"
     ]
   };
 }

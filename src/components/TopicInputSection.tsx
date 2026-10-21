@@ -223,25 +223,35 @@ export const TopicInputSection: React.FC<TopicInputSectionProps> = ({
 
         {/* Quick Suggestions Chips */}
         <div className="mt-5 max-w-3xl mx-auto">
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center justify-between mb-2.5">
             <span className="text-xs font-bold text-blue-800 flex items-center gap-1.5">
               <Lightbulb className="w-4 h-4 text-amber-500" />
               <span>Gợi ý bài học nổi bật của Cô Hằng:</span>
             </span>
           </div>
 
-          <div className="flex flex-wrap gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5">
             {currentSuggestions.map((item, idx) => (
               <button
                 key={idx}
                 type="button"
                 onClick={() => handleSuggestionClick(item.label)}
                 disabled={isLoading}
-                className="group flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-blue-50 border border-blue-100 hover:border-blue-300 text-slate-700 hover:text-blue-900 font-semibold text-xs sm:text-sm shadow-2xs hover:shadow-xs transition-all cursor-pointer active:scale-95"
+                className="w-full flex items-center justify-between p-2.5 sm:px-3.5 sm:py-2.5 rounded-2xl bg-white hover:bg-blue-50/70 border border-slate-200/90 hover:border-blue-300 shadow-2xs hover:shadow-xs transition-all cursor-pointer active:scale-95 group text-left"
               >
-                <span className="text-base">{item.icon}</span>
-                <span>{item.label}</span>
-                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-blue-50 group-hover:bg-blue-200/70 text-blue-700 group-hover:text-blue-900 border border-blue-100">
+                <span className="flex items-center gap-2 min-w-0 pr-2">
+                  <span className="text-base shrink-0">{item.icon}</span>
+                  <span className="font-semibold text-slate-800 group-hover:text-blue-900 text-xs sm:text-sm truncate">
+                    {item.label}
+                  </span>
+                </span>
+                <span
+                  className={`text-[10px] sm:text-[11px] font-bold px-2 py-0.5 rounded-md border shrink-0 ${
+                    item.badge.includes("Tiếng Việt")
+                      ? "bg-sky-50 text-sky-700 border-sky-200/70"
+                      : "bg-blue-50 text-blue-700 border-blue-200/70"
+                  }`}
+                >
                   {item.badge}
                 </span>
               </button>

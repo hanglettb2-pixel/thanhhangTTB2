@@ -122,6 +122,10 @@ export const InteractiveQuiz: React.FC<InteractiveQuizProps> = ({
             <p className="text-xs sm:text-sm text-slate-500 font-medium">
               Thử tài trả lời đúng để nhận Hoa Điểm 10 và Sao Thưởng nhé! 📘
             </p>
+            <div className="mt-1.5 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-blue-800 text-[11px] font-bold">
+              <span>🎯</span>
+              <span>Chuẩn hóa nội dung theo SGK Lớp 2 (Bộ Kết nối tri thức với cuộc sống)</span>
+            </div>
           </div>
         </div>
 

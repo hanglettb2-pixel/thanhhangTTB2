@@ -1,15 +1,24 @@
 import express from "express";
 import path from "path";
+import fs from "fs";
 import dotenv from "dotenv";
 import { GoogleGenAI, Type } from "@google/genai";
 import { createServer as createViteServer } from "vite";
+import { generateClientFallbackLesson } from "./src/utils/fallbackLessons";
 
 dotenv.config();
 
 const app = express();
-const PORT = 3000;
+const portArgIndex = process.argv.indexOf("--port");
+const cliPort = portArgIndex !== -1 ? parseInt(process.argv[portArgIndex + 1], 10) : undefined;
+const PORT = cliPort || 3000;
 
 app.use(express.json());
+
+// Fast health-check endpoint for dev server monitors
+app.get("/api/health", (_req, res) => {
+  res.json({ status: "ok", port: PORT, teacher: "Cô Lê Thị Thanh Hằng", school: "Trường Tiểu học Tân Thành Bình" });
+});
 
 // Lazy-safe Gemini AI client initialization
 function getGenAIClient() {
@@ -29,272 +38,8 @@ function getGenAIClient() {
 }
 
 // Fallback response generator for children when offline/no-key
-function generateFallbackResponse(topic: string, subject?: string) {
-  const cleanTopic = topic.trim() || (subject === "tieng-viet" ? "Biện pháp so sánh" : "Bảng nhân 5");
-  const isToan = subject === "toan" || cleanTopic.toLowerCase().includes("toán") || cleanTopic.toLowerCase().includes("cộng") || cleanTopic.toLowerCase().includes("nhân") || cleanTopic.toLowerCase().includes("hình");
-  
-  if (isToan) {
-    return {
-      topic: cleanTopic,
-      topicEmoji: "🔢",
-      summaryBadge: "Môn Toán Cô Thanh Hằng",
-      simpleExplanation: {
-        title: `Bí quyết học tốt ${cleanTopic}`,
-        content: `Chào con yêu! Trong môn Toán của Cô Thanh Hằng, ${cleanTopic} giống như những viên gạch xếp hình kỳ diệu. Khi con hiểu rõ quy luật của các con số, con sẽ giải toán nhanh như một siêu anh hùng nhí đấy!`,
-        analogy: `Hãy tưởng tượng các con số giống như những người bạn đang cùng chơi một trò chơi xếp kẹo, cứ mỗi bước đi là một khám phá bất ngờ!`
-      },
-      relatableExamples: [
-        {
-          title: "Ví dụ chia kẹo cùng bạn bè",
-          description: "Nếu con có 10 chiếc kẹo và muốn chia đều cho 2 bạn, mỗi bạn sẽ nhận được đúng 5 chiếc kẹo ngọt ngào (10 : 2 = 5).",
-          emoji: "🍬"
-        },
-        {
-          title: "Ví dụ đếm đồ chơi trong phòng",
-          description: "Mỗi hộp đựng 3 bạn gấu bông, nếu con có 4 hộp thì tổng cộng có 12 bạn gấu (3 x 4 = 12).",
-          emoji: "🧸"
-        }
-      ],
-      keyPoints: [
-        {
-          number: 1,
-          title: "Đọc kỹ đề bài",
-          takeaway: "Gạch chân dưới những con số và câu hỏi đề bài yêu cầu tìm.",
-          iconHint: "🔍"
-        },
-        {
-          number: 2,
-          title: "Hiểu bản chất phép tính",
-          takeaway: "Nhớ kỹ quy tắc cộng, trừ, nhân, chia để không bao giờ bị nhầm lẫn.",
-          iconHint: "💡"
-        },
-        {
-          number: 3,
-          title: "Kiểm tra lại kết quả",
-          takeaway: "Luôn tính lại một lần nữa để chắc chắn nhận trọn điểm 10 của Cô nhé!",
-          iconHint: "⭐"
-        }
-      ],
-      flashcards: [
-        {
-          id: 1,
-          front: `Bản chất của ${cleanTopic} là gì?`,
-          back: `Là quy luật toán học giúp con tính toán và tư duy nhanh chóng, chính xác dựa trên các số liệu cho trước.`,
-          category: "Thuật ngữ Toán",
-          emoji: "🔢"
-        },
-        {
-          id: 2,
-          front: "Khi gặp bài toán có lời văn, bước 1 con làm gì?",
-          back: "Đọc thật kỹ đề bài ít nhất 2 lần và gạch chân các dữ kiện 'bài toán cho biết gì' và 'bài toán hỏi gì'.",
-          category: "Phương pháp giải",
-          emoji: "🔍"
-        },
-        {
-          id: 3,
-          front: "Mẹo kiểm tra lại kết quả phép tính như thế nào?",
-          back: "Lấy kết quả tính ngược lại (Ví dụ: kiểm tra phép trừ bằng phép cộng, kiểm tra phép chia bằng phép nhân).",
-          category: "Bí kíp tính nhanh",
-          emoji: "💡"
-        },
-        {
-          id: 4,
-          front: "Làm sao để không bị nhầm lẫn khi đặt tính rồi tính?",
-          back: "Viết các chữ số thẳng cột với nhau: hàng đơn vị thẳng hàng đơn vị, hàng chục thẳng hàng chục.",
-          category: "Quy tắc trình bày",
-          emoji: "📐"
-        },
-        {
-          id: 5,
-          front: "Bí quyết học giỏi Toán của Cô Thanh Hằng là gì?",
-          back: "Hiểu bản chất, chăm chỉ luyện tập 15 phút mỗi ngày và tự tin đặt câu hỏi khi chưa hiểu bài!",
-          category: "Lời khuyên từ Cô",
-          emoji: "🌸"
-        }
-      ],
-      quizQuestions: [
-        {
-          id: 1,
-          question: `Khi làm bài tập về ${cleanTopic}, bước đầu tiên con cần làm là gì?`,
-          options: [
-            "Đọc kỹ đề bài và xem bài toán cho gì, hỏi gì",
-            "Viết ngay đáp án mà không cần suy nghĩ",
-            "Bỏ qua không làm",
-            "Chỉ đoán mò kết quả"
-          ],
-          correctIndex: 0,
-          hint: "Đọc kỹ đề bài là chiếc chìa khóa vạn năng để mở ra lời giải đúng.",
-          explanation: "Đúng rồi con yêu! Cô Thanh Hằng luôn nhắc: Đọc kỹ đề bài sẽ giúp con không bao giờ làm sai!",
-          funFact: "Các nhà toán học nổi tiếng thế giới cũng luôn bắt đầu từ việc đọc đề thật cẩn thận đấy!"
-        },
-        {
-          id: 2,
-          question: "Nếu con gặp một bài toán khó, con nên làm như thế nào?",
-          options: [
-            "Khóc nhè và bỏ cuộc",
-            "Tách bài toán thành các bước nhỏ và vẽ sơ đồ minh họa",
-            "Nhờ người khác làm hộ từ đầu đến cuối",
-            "Chọn bừa một đáp án"
-          ],
-          correctIndex: 1,
-          hint: "Vẽ hình hoặc sơ đồ sẽ giúp con nhìn thấy đáp án ngay trước mắt.",
-          explanation: "Hoan hô con! Tách nhỏ bài toán và vẽ sơ đồ là phương pháp học toán đỉnh cao của học sinh giỏi!",
-          funFact: "Hình vẽ giúp não bộ của con tư duy nhanh gấp 3 lần chữ viết thông thường!"
-        },
-        {
-          id: 3,
-          question: "Để tính toán nhanh và chính xác môn Toán, bí quyết của con là gì?",
-          options: [
-            "Học thuộc bảng tính và chăm chỉ rèn luyện mỗi ngày",
-            "Chỉ học trước ngày thi một hôm",
-            "Không cần làm bài tập về nhà",
-            "Tính nhẩm bừa"
-          ],
-          correctIndex: 0,
-          hint: "Chăm chỉ rèn luyện sẽ biến con thành kiện tướng toán học.",
-          explanation: "Tuyệt vời! Chăm chỉ mỗi ngày 15 phút sẽ giúp con tự tin đạt điểm 10 môn Toán của Cô Thanh Hằng!",
-          funFact: "Bộ não của con sẽ tạo thêm hàng ngàn đường truyền thông minh mỗi khi con giải xong một bài toán khó!"
-        }
-      ],
-      encouragementMessage: "Cô Thanh Hằng rất tự hào về con! Con thông minh và chăm chỉ lắm, hãy tiếp tục phát huy nhé!",
-      followUpSuggestions: [
-        `Cô Hằng ơi, có mẹo nào nhớ nhanh ${cleanTopic} không ạ?`,
-        `Cho con một bài toán vui về ${cleanTopic} được không cô?`,
-        `Ứng dụng ${cleanTopic} trong mua sắm như thế nào ạ?`
-      ]
-    };
-  }
-
-  // Tiếng Việt fallback
-  return {
-    topic: cleanTopic,
-    topicEmoji: "📖",
-    summaryBadge: "Môn Tiếng Việt Cô Thanh Hằng",
-    simpleExplanation: {
-      title: `Cùng Cô Hằng tìm hiểu ${cleanTopic}`,
-      content: `Chào con yêu! Tiếng Việt của chúng mình đẹp và giàu cảm xúc vô cùng. Khi tìm hiểu về ${cleanTopic}, con sẽ biết cách dùng từ thật hay, viết câu văn mượt mà và biểu đạt tình cảm trọn vẹn.`,
-      analogy: `Hãy tưởng tượng những câu chữ giống như những nốt nhạc vui tươi, khi con ghép đúng cách, con sẽ tạo nên một bài hát tuyệt đẹp!`
-    },
-    relatableExamples: [
-      {
-        title: "Ví dụ trong câu văn miêu tả",
-        description: "Khi tả đôi mắt mẹ: 'Mắt mẹ sáng long lanh như những vì sao đêm', câu văn sẽ trở nên sinh động và ấm áp biết bao.",
-        emoji: "✨"
-      },
-      {
-        title: "Ví dụ trong giao tiếp hằng ngày",
-        description: "Khi nói lời cảm ơn hay xin lỗi thật lễ phép với ông bà, cha mẹ và thầy cô.",
-        emoji: "🌸"
-      }
-    ],
-    keyPoints: [
-      {
-        number: 1,
-        title: "Hiểu đúng nghĩa của từ",
-        takeaway: "Dùng từ ngữ chính xác, đúng ngữ cảnh và giàu hình ảnh.",
-        iconHint: "📚"
-      },
-      {
-        number: 2,
-        title: "Viết đúng chính tả & ngữ pháp",
-        takeaway: "Đầu câu viết hoa, cuối câu có dấu chấm, phân biệt rõ các âm vần dễ lẫn.",
-        iconHint: "✍️"
-      },
-      {
-        number: 3,
-        title: "Thêm cảm xúc vào bài văn",
-        takeaway: "Dùng từ ngữ gợi tả và hình ảnh so sánh để bài viết sinh động hơn.",
-        iconHint: "💖"
-      }
-    ],
-    flashcards: [
-      {
-        id: 1,
-        front: `Thế nào là ${cleanTopic}?`,
-        back: `Là kiến thức Tiếng Việt quan trọng giúp con diễn đạt ý nghĩ trong sáng, câu văn sinh động và giàu cảm xúc.`,
-        category: "Khái niệm Tiếng Việt",
-        emoji: "📖"
-      },
-      {
-        id: 2,
-        front: "Mẹo để câu văn hay và cuốn hút người đọc là gì?",
-        back: "Sử dụng từ ngữ gợi tả màu sắc, âm thanh và các hình ảnh so sánh, nhân hóa gần gũi.",
-        category: "Bí kíp làm văn",
-        emoji: "✨"
-      },
-      {
-        id: 3,
-        front: "Quy tắc vàng về dấu câu trong Tiếng Việt là gì?",
-        back: "Chữ cái đầu câu phải viết hoa, kết thúc câu phải có dấu chấm hoặc dấu câu thích hợp.",
-        category: "Quy tắc ngữ pháp",
-        emoji: "✍️"
-      },
-      {
-        id: 4,
-        front: "Cách phân biệt và viết đúng chính tả các từ dễ lẫn?",
-        back: "Hiểu nghĩa của từ, phát âm chuẩn và tích cực đọc sách thiếu nhi mỗi ngày.",
-        category: "Bí kíp chính tả",
-        emoji: "📚"
-      },
-      {
-        id: 5,
-        front: "Lời khuyên của Cô Thanh Hằng khi học Tiếng Việt?",
-        back: "Yêu quý tiếng mẹ đẻ, tự tin viết nên những câu chuyện đẹp và gửi gắm yêu thương vào từng con chữ!",
-        category: "Lời khuyên từ Cô",
-        emoji: "🌸"
-      }
-    ],
-    quizQuestions: [
-      {
-        id: 1,
-        question: `Khi viết một câu văn Tiếng Việt hoàn chỉnh, con cần chú ý điều gì nhất?`,
-        options: [
-          "Đầu câu viết hoa và cuối câu có dấu câu phù hợp",
-          "Viết không cần dấu câu",
-          "Chỉ cần viết một từ duy nhất",
-          "Không cần chú ý chính tả"
-        ],
-        correctIndex: 0,
-        hint: "Dấu chấm câu giúp người đọc hiểu trọn vẹn ý của con.",
-        explanation: "Chính xác! Cô Thanh Hằng rất khen con đã nhớ quy tắc vàng khi viết câu Tiếng Việt!",
-        funFact: "Dấu câu giống như những biển báo giao thông giúp bài văn của con trôi chảy và rõ nghĩa!"
-      },
-      {
-        id: 2,
-        question: "Làm thế nào để bài tập làm văn của con hay và giàu cảm xúc hơn?",
-        options: [
-          "Sử dụng các hình ảnh so sánh, từ ngữ gợi tả sinh động",
-          "Chép nguyên bài của người khác",
-          "Viết thật ngắn cho xong",
-          "Không dùng từ chỉ màu sắc, âm thanh"
-        ],
-        correctIndex: 0,
-        hint: "So sánh và từ gợi cảm xúc sẽ làm bừng sáng bài văn.",
-        explanation: "Giỏi lắm con yêu! Những hình ảnh so sánh ví von sẽ làm bài văn của con điểm 10 rực rỡ!",
-        funFact: "Các nhà văn lớn đều là những người rất thích quan sát thiên nhiên và đời sống xung quanh đấy!"
-      },
-      {
-        id: 3,
-        question: "Bí quyết để không bao giờ bị sai lỗi chính tả Tiếng Việt là gì?",
-        options: [
-          "Đọc nhiều sách truyện thiếu nhi và chăm viết bài cẩn thận",
-          "Không cần đọc sách",
-          "Viết thật nhanh ẩu",
-          "Không kiểm tra lại bài"
-        ],
-        correctIndex: 0,
-        hint: "Mỗi trang sách hay là một người thầy dạy chính tả tuyệt vời.",
-        explanation: "Tuyệt vời! Đọc sách mỗi ngày cùng Cô Hằng sẽ giúp vốn từ của con phong phú và viết chuẩn chính tả!",
-        funFact: "Đọc 10 trang sách mỗi ngày giúp con biết thêm hơn 1000 từ ngữ đẹp trong một năm!"
-      }
-    ],
-    encouragementMessage: "Cô Thanh Hằng gửi tặng con một bông hoa điểm 10! Con rất chăm chỉ và yêu thích Tiếng Việt!",
-    followUpSuggestions: [
-      `Cô Hằng ơi, viết đoạn văn ngắn về ${cleanTopic} như thế nào ạ?`,
-      `Có câu đố chữ nào vui về ${cleanTopic} không cô?`,
-      `Cách phân biệt chính tả dễ nhớ nhất là gì ạ?`
-    ]
-  };
+function generateFallbackResponse(topic: string, subject?: string, ageGroup?: string) {
+  return generateClientFallbackLesson(topic, subject as any, ageGroup);
 }
 
 // Main API to teach a topic to kids (6-10 years old)
@@ -329,11 +74,17 @@ CẤU TRÚC BẮT BUỘC TRẢ VỀ THEO 5 PHẦN CHUẨN:
    - back: Mặt sau là câu trả lời hoặc giải thích súc tích, rõ ràng, dễ hiểu của Cô Hằng
    - category: Phân loại ("Thuật ngữ", "Câu hỏi tư duy", "Mẹo làm bài", "Quy tắc")
    - emoji: Biểu tượng phù hợp (🌸, 🔢, 💡, 📐, ✍️, ⭐...)
-5. 3 câu hỏi kiểm tra kiến thức (Quiz Questions): Đúng 3 câu hỏi trắc nghiệm đố vui có 4 đáp án (A, B, C, D), kèm theo:
-   - correctIndex (0, 1, 2 hoặc 3)
-   - hint (gợi ý nhẹ nhàng của Cô Hằng để bé tự suy nghĩ)
-   - explanation (lời khen ngợi và giảng giải chi tiết của Cô Hằng)
-   - funFact (1 sự thật thú vị toán học/ngôn ngữ mở rộng kiến thức)
+5. 3 CÂU HỎI KIỂM TRA KIẾN THỨC CHUẨN HÓA THEO SÁCH GIÁO KHOA LỚP 2 (KẾT NỐI TRI THỨC VỚI CUỘC SỐNG):
+   - TUYỆT ĐỐI KHÔNG ra các câu hỏi chung chung sáo rỗng về thái độ học tập (như "khi gặp bài khó con làm gì", "bước 1 con làm gì", "bí quyết học là gì").
+   - 100% CẢ 3 CÂU HỎI PHẢI LÀ BÀI TẬP VÀ CÂU HỎI KIẾN THỨC CỤ THỂ theo đúng nội dung bài học:
+     + Câu 1 (Mức độ Nhận biết): Hỏi khái niệm / công thức / nhận diện thành phần phép tính (số hạng, tổng, số bị trừ, số trừ, hiệu, thừa số, tích, số bị chia, thương) hoặc nhận diện từ loại (từ chỉ sự vật, hoạt động, đặc điểm, mẫu câu Ai là gì / Ai làm gì / Ai thế nào, quy tắc chính tả c/k, l/n, g/gh, ng/ngh, dấu câu).
+     + Câu 2 (Mức độ Thông hiểu - Tính toán/Áp dụng): Một phép tính cụ thể (cộng trừ có nhớ, bảng nhân 2/5, bảng chia 2/5, đổi đơn vị dm/m/km/kg/lít) hoặc bài tập điền từ/dấu câu vào câu văn cụ thể.
+     + Câu 3 (Mức độ Vận dụng - Toán lời văn / Phân tích): Một bài toán có lời văn thực tế gần gũi học sinh lớp 2 (chia kẹo, đếm đồ dùng học tập, tính cân nặng kg, lít, độ dài đường gấp khúc, xác suất chắc chắn/có thể/không thể) hoặc phân tích hình ảnh so sánh, chọn câu đúng trong bài đọc lớp 2.
+   - Mỗi câu có đúng 4 phương án trắc nghiệm rõ ràng (A, B, C, D)
+   - correctIndex (0, 1, 2 hoặc 3): Vị trí đáp án đúng chính xác
+   - hint: Gợi ý tư duy ngắn gọn, ân cần của Cô Hằng để bé tự suy luận ra cách làm
+   - explanation: Lời khen ngợi và lời giải thích cặn kẽ từng bước (với môn Toán phải ghi rõ phép tính và đáp số; với Tiếng Việt chỉ rõ vì sao chọn từ đó)
+   - funFact: 1 kiến thức thực tế lý thú, bổ ích liên quan trực tiếp đến bài học.
 
 Định dạng trả về: JSON thuần túy theo schema yêu cầu.`;
 
@@ -508,23 +259,54 @@ Hãy trả lời con với tư cách Cô Thanh Hằng dịu dàng, ân cần, gi
 
 // Vite middleware & Static serving
 async function start() {
-  if (process.env.NODE_ENV !== "production") {
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: "spa",
-    });
-    app.use(vite.middlewares);
-  } else {
-    const distPath = path.join(process.cwd(), "dist");
-    app.use(express.static(distPath));
-    app.get("*", (req, res) => {
-      res.sendFile(path.join(distPath, "index.html"));
-    });
-  }
+  try {
+    if (process.env.NODE_ENV !== "production") {
+      const vite = await createViteServer({
+        server: { middlewareMode: true },
+        appType: "spa",
+      });
+      app.use(vite.middlewares);
 
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`AI Study Buddy server running on http://0.0.0.0:${PORT}`);
-  });
+      // Serve index.html transformed by Vite for any client routes/reloads
+      app.use("*", async (req, res, next) => {
+        if (req.originalUrl.startsWith("/api") || req.originalUrl.startsWith("/assets")) {
+          return next();
+        }
+        try {
+          const indexPath = path.resolve(process.cwd(), "index.html");
+          let template = fs.readFileSync(indexPath, "utf-8");
+          template = await vite.transformIndexHtml(req.originalUrl, template);
+          res.status(200).set({ "Content-Type": "text/html" }).end(template);
+        } catch (e) {
+          vite.ssrFixStacktrace(e as Error);
+          next(e);
+        }
+      });
+    } else {
+      const distPath = path.join(process.cwd(), "dist");
+      app.use(express.static(distPath));
+      app.get("*", (req, res) => {
+        if (req.originalUrl.startsWith("/api")) {
+          return res.status(404).json({ error: "Route not found" });
+        }
+        res.sendFile(path.join(distPath, "index.html"));
+      });
+    }
+
+    const server = app.listen(PORT, "0.0.0.0", () => {
+      console.log(`AI Study Buddy server running on http://0.0.0.0:${PORT}`);
+    });
+
+    server.on("error", (err: any) => {
+      if (err.code === "EADDRINUSE") {
+        console.warn(`Port ${PORT} is already in use, reusing active socket.`);
+      } else {
+        console.error("Server listen error:", err);
+      }
+    });
+  } catch (err) {
+    console.error("Critical server startup error:", err);
+  }
 }
 
 start();

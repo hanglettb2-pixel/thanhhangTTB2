@@ -72,6 +72,7 @@ export default function App() {
         const params = new URLSearchParams(window.location.search);
         const urlTopic = params.get("topic") || params.get("bai") || params.get("chude");
         const urlSubject = params.get("subject") || params.get("mon");
+
         if (urlSubject === "toan" || urlSubject === "tieng-viet" || urlSubject === "all") {
           setSubject(urlSubject);
         }
